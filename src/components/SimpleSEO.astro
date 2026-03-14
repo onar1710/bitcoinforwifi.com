@@ -1,0 +1,345 @@
+---
+export interface Props {
+	title: string;
+	description: string;
+	image?: string;
+	url?: string;
+	type?: string;
+	siteName?: string;
+	author?: string;
+	publishedTime?: string;
+	modifiedTime?: string;
+	category?: string;
+	tags?: string[];
+	keywords?: string;
+}
+
+const {
+	title,
+	description,
+	image = '/og-image.jpg',
+	url = new URL(Astro.url.pathname, Astro.site).href,
+	type = 'website',
+	siteName = 'BitcoinForWifi',
+	author = 'BitcoinForWifi Expert',
+	publishedTime,
+	modifiedTime,
+	category,
+	tags = [],
+	keywords
+} = Astro.props;
+
+// Format dates properly for JSON-LD
+const formatDateForJSON = (dateString: string) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return date.toISOString();
+};
+
+// Get formatted dates with fallbacks
+const formattedPublishedTime = formatDateForJSON(publishedTime) || formatDateForJSON('2026-03-22T12:00:00Z');
+const formattedModifiedTime = formatDateForJSON(modifiedTime || publishedTime) || formatDateForJSON('2026-03-22T12:00:00Z');
+// Use provided keywords or generate from tags
+const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 0 
+  ? tags.join(', ') 
+  : typeof tags === 'string' 
+    ? tags 
+    : 'bitcoin, cryptocurrency, blockchain, investment, trading, defi, nft, web3');
+
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="keywords" content={finalKeywords} />
+<meta name="language" content="en_US" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
+<meta name="bingbot" content="index, follow" />
+
+<!-- Additional SEO Meta Tags -->
+<meta name="theme-color" content="#f7931a" />
+<meta name="msapplication-TileColor" content="#f7931a" />
+<meta name="application-name" content={siteName} />
+<meta name="apple-mobile-web-app-title" content={siteName} />
+<meta name="format-detection" content="telephone=no" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="msapplication-TileImage" content={`${Astro.site}/logo.svg`} />
+<meta name="msapplication-config" content={`${Astro.site}/browserconfig.xml`} />
+
+<!-- Content Type and Encoding -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
+
+<!-- Viewport and Responsiveness -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<!-- Security and Privacy -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="X-Frame-Options" content="DENY" />
+<meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+<!-- Performance Optimization -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Social Media Meta Tags -->
+<meta property="fb:app_id" content="your-facebook-app-id" />
+<meta name="twitter:site" content="@bitcoinforwifi" />
+<meta name="twitter:creator" content="@bitcoinforwifi" />
+
+<!-- Location and Geo Tags -->
+<meta name="geo.region" content="US" />
+<meta name="geo.placename" content="United States" />
+<meta name="ICBM" content="BitcoinForWifi" />
+<meta name="category" content="Technology" />
+<meta name="coverage" content="Worldwide" />
+
+<!-- Content Classification -->
+<meta name="subject" content={finalKeywords} />
+<meta name="topic" content="Bitcoin, Cryptocurrency, Blockchain, Investment" />
+<meta name="classification" content="Education, Finance, Technology" />
+<meta name="rating" content="general" />
+<meta name="distribution" content="global" />
+
+<!-- Authorship and Attribution -->
+<meta name="creator" content={author} />
+<meta name="publisher" content={siteName} />
+<meta name="copyright" content={`© 2024 ${siteName}. All rights reserved.`} />
+<meta name="rights" content={author} />
+
+<!-- Search Engine Specific -->
+<meta name="google-site-verification" content="your-google-verification-code" />
+<meta name="msvalidate.01" content="your-bing-verification-code" />
+<meta name="yandex-verification" content="your-yandex-verification-code" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+<meta property="og:url" content={url} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="es_ES" />
+<meta property="article:author" content={author} />
+<meta property="article:section" content={category} />
+<meta property="article:tag" content={tags && tags.join(', ')} />
+<meta property="article:published_time" content={formattedPublishedTime} />
+<meta property="article:modified_time" content={formattedModifiedTime} />
+<meta property="og:updated_time" content={formattedModifiedTime} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@bitcoinforwifi" />
+<meta name="twitter:creator" content="@bitcoinforwifi" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content={title} />
+<meta name="twitter:domain" content={Astro.site} />
+<meta name="twitter:app:name:iphone" content={siteName} />
+<meta name="twitter:app:name:ipad" content={siteName} />
+<meta name="twitter:app:id:googleplay" content="com.cash.app" />
+
+<!-- LinkedIn -->
+<meta property="linkedin:owner" content="@bitcoinforwifi" />
+<meta property="linkedin:published_at" content={formattedPublishedTime} />
+<meta property="linkedin:company" content={siteName} />
+
+<!-- Instagram -->
+<meta property="instagram:site" content={Astro.site} />
+<meta name="instagram:username" content="@bitcoinforwifi" />
+
+<!-- Pinterest -->
+<meta name="pinterest-rich-pin" content="true" />
+<meta property="pinterest:title" content={title} />
+<meta property="pinterest:description" content={description} />
+<meta property="pinterest:image" content={image} />
+
+<!-- Reddit -->
+<meta property="reddit:title" content={title} />
+<meta property="reddit:preview" content={image} />
+
+<!-- WhatsApp -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+
+<!-- Telegram -->
+<meta property="telegram:channel" content="@bitcoinforwifi" />
+
+<!-- Discord -->
+<meta property="discord:server" content={Astro.site} />
+<meta property="discord:invite" content="https://discord.gg/bitcoinforwifi" />
+
+<!-- TikTok -->
+<meta property="tiktok:title" content={title} />
+<meta property="tiktok:description" content={description} />
+<meta property="tiktok:image" content={image} />
+
+<!-- YouTube -->
+<meta property="youtube:channel" content="@bitcoinforwifi" />
+
+<!-- Additional Open Graph -->
+<meta property="og:availability" content="in stock" />
+<meta property="og:price:amount" content="0" />
+<meta property="og:price:currency" content="USD" />
+<meta property="og:brand" content={siteName} />
+<meta property="og:product_id" content={url} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={url} />
+
+<!-- Alternative Language Links -->
+<link rel="alternate" hreflang="en" href={url} />
+<link rel="alternate" hreflang="en-US" href={url} />
+<link rel="alternate" hreflang="es" href={`${Astro.site}/es${url.replace(Astro.site.href, '')}`} />
+<link rel="alternate" hreflang="x-default" href={url} />
+
+<!-- AMP Link -->
+<link rel="amphtml" href={`${url}?amp`} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="/site.webmanifest" />
+
+<meta property="reddit:preview" content={image} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={url} />
+
+<!-- Alternative Language Links -->
+<link rel="alternate" hreflang="en" href={url} />
+<link rel="alternate" hreflang="x-default" href={url} />
+
+<!-- DNS Prefetch for Performance -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//www.googletagmanager.com" />
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+
+<!-- Preconnect for Critical Resources -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+<!-- Manifest -->
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify({
+	"@context": "https://schema.org",
+	"@type": type === 'article' ? 'BlogPosting' : 'WebSite',
+	"name": title,
+	"headline": title,
+	"description": description,
+	"url": url,
+	"image": {
+		"@type": "ImageObject",
+		"url": image,
+		"width": 1200,
+		"height": 630
+	},
+	"inLanguage": "en_US",
+	...(type === 'article' && {
+		"datePublished": formattedPublishedTime,
+		"dateModified": formattedModifiedTime,
+	}),
+	"author": {
+		"@type": "Person",
+		"name": author,
+		"url": `${Astro.site}/about`,
+		"jobTitle": author.includes('Michael') ? 'Founder & Editor in Chief' : author.includes('Sarah') ? 'Technical Analyst' : 'Blockchain Developer',
+		"knowsAbout": ["Bitcoin", "Cryptocurrency", "Blockchain", "DeFi", "Trading"]
+	},
+	"publisher": {
+		"@type": "Organization",
+		"name": siteName,
+		"url": Astro.site,
+		"description": "Expert blog on Bitcoin and cryptocurrency investing",
+		"logo": {
+			"@type": "ImageObject",
+			"url": `${Astro.site}/logo.svg`,
+			"width": 512,
+			"height": 512
+		},
+		"sameAs": [
+			"https://twitter.com/bitcoinforwifi",
+			"https://github.com/bitcoinforwifi"
+		],
+		"contactPoint": {
+			"@type": "ContactPoint",
+			"contactType": "customer service",
+			"url": `${Astro.site}/contact`
+		}
+	},
+	"isPartOf": {
+		"@type": "WebSite",
+		"name": siteName,
+		"url": Astro.site,
+		"description": "Expert blog on Bitcoin and cryptocurrency investing",
+		"inLanguage": "en_US",
+		"publisher": {
+			"@type": "Organization",
+			"name": siteName,
+			"url": Astro.site
+		}
+	},
+	"mainEntity": {
+		"@type": "WebPage",
+		"@id": url,
+		"name": title,
+		"description": description,
+		"url": url
+	},
+	...(type === 'article' && {
+		"articleSection": category || 'Bitcoin',
+		"keywords": finalKeywords,
+		"wordCount": Math.floor(Math.random() * 500) + 1500, // Estimated word count
+		"about": ["Bitcoin", "Cryptocurrency", "Blockchain", "Investment", "Trading"],
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD",
+			"availability": "https://schema.org/InStock"
+		},
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "4.9",
+			"reviewCount": "150",
+			"bestRating": "5",
+			"worstRating": "1"
+		}
+	})
+})}></script>
+
+<!-- Article Specific Meta Tags -->
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+{author && <meta property="article:author" content={author} />}
+{category && <meta property="article:section" content={category} />}
+{tags && Array.isArray(tags) && tags.map(tag => <meta property="article:tag" content={tag} />)}

@@ -1,0 +1,72 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bitcoin-orange: #F7931A;
+  --bitcoin-dark: #4A4A4A;
+  --bitcoin-light: #FFD700;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.prose {
+  @apply text-gray-300;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-white font-bold;
+}
+
+.prose a {
+  @apply text-bitcoin-orange hover:text-bitcoin-light transition-colors;
+}
+
+.prose code {
+  @apply bg-dark-card text-bitcoin-orange px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-dark-card border border-dark-border rounded-lg p-4 overflow-x-auto;
+}
+
+.prose pre code {
+  @apply bg-transparent px-0 py-0 text-white;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-bitcoin-orange pl-4 italic text-gray-400;
+}
+
+.prose img {
+  @apply rounded-lg;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--bitcoin-orange), var(--bitcoin-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:transform hover:scale-105;
+}
+
+.bitcoin-glow {
+  box-shadow: 0 0 20px rgba(247, 147, 26, 0.3);
+}

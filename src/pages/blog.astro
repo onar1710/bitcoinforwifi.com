@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { blogPosts } from '../data/blog-posts';
+import { formatDate } from '../utils/dateUtils.js';
+
+const posts = blogPosts.filter(post => post.published);
+const categories = [...new Set(posts.map(post => post.category))];
+---
+
+<Layout title="Blog - BitcoinForWifi" type="website">
+	<section class="py-20">
+		<div class="container mx-auto px-4">
+			<div class="text-center mb-12">
+				<h1 class="text-4xl md:text-5xl font-bold mb-4">
+					<span class="gradient-text">BitcoinForWifi Blog</span>
+				</h1>
+				<p class="text-xl text-gray-300 max-w-3xl mx-auto">
+					Expert analysis, practical guides and the latest insights about Bitcoin, 
+					cryptocurrency investments and blockchain technology.
+				</p>
+			</div>
+			
+			<!-- Categories Filter -->
+			<div class="flex flex-wrap justify-center gap-3 mb-12">
+				<button class="px-4 py-2 bg-bitcoin-orange text-white rounded-full hover:bg-bitcoin-light transition-colors">
+					All
+				</button>
+				{categories.map((category) => (
+					<button class="px-4 py-2 bg-dark border border-dark-border text-gray-300 rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors">
+						{category}
+					</button>
+				))}
+			</div>
+			
+			<!-- Blog Posts Grid -->
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				{posts.map((post) => (
+					<article class="bg-dark-card border border-dark-border rounded-lg overflow-hidden card-hover group">
+						<div class="h-48 bg-gradient-to-br from-bitcoin-orange/20 to-transparent relative overflow-hidden">
+							<div class="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+							<div class="absolute inset-0 flex items-center justify-center">
+								<svg class="w-16 h-16 text-bitcoin-orange/50" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M11.938 4.969c-.393-.197-.836-.295-1.23-.295H4.969c-.394 0-.69.295-.69.69v13.872c0 .393.296.689.69.689h3.738c.394 0 .69-.296.69-.69v-5.416h1.311c.394 0 .837-.098 1.23-.295.394-.197.788-.492 1.182-.887.394-.394.69-.788.887-1.182.197-.393.295-.836.295-1.23v-2.463c0-.394-.098-.837-.295-1.23-.197-.394-.492-.788-.887-1.182-.394-.394-.788-.69-1.182-.887z"/>
+								</svg>
+							</div>
+							<div class="absolute top-4 left-4">
+								<span class="px-3 py-1 bg-bitcoin-orange text-white text-xs font-semibold rounded-full">
+									{post.category}
+								</span>
+							</div>
+						</div>
+						
+						<div class="p-6">
+							<div class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+								<time datetime={post.date}>
+									{formatDate(post.date)}
+								</time>
+								<span>•</span>
+								<span>{post.readTime}</span>
+							</div>
+							
+							<h3 class="text-xl font-semibold mb-3 group-hover:text-bitcoin-orange transition-colors">
+								<a href={`/blog/${post.slug}`}>{post.title}</a>
+							</h3>
+							
+							<p class="text-gray-400 mb-4 line-clamp-3">{post.description}</p>
+							
+							<a href={`/blog/${post.slug}`} class="text-bitcoin-orange hover:text-bitcoin-light transition-colors font-medium inline-flex items-center group">
+								Read More 
+								<svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+								</svg>
+							</a>
+						</div>
+					</article>
+				))}
+			</div>
+			
+			<!-- Load More Button -->
+			<div class="text-center mt-12">
+				<button class="px-8 py-3 border-2 border-bitcoin-orange text-bitcoin-orange font-semibold rounded-lg hover:bg-bitcoin-orange hover:text-white transition-all duration-300">
+					Load More Articles
+				</button>
+			</div>
+		</div>
+	</section>
+	
+	<!-- Newsletter Section -->
+	<section class="py-20 bg-dark-card">
+		<div class="container mx-auto px-4">
+			<div class="max-w-2xl mx-auto text-center">
+				<h2 class="text-3xl font-bold mb-4">
+					<span class="gradient-text">Stay Informed</span>
+				</h2>
+				<p class="text-gray-400 text-lg">Stay informed with the latest news and analysis on Bitcoin directly in your inbox.</p>
+				
+				<form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+					<input 
+						type="email" 
+						placeholder="your@email.com" 
+						class="flex-1 px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-bitcoin-orange transition-colors"
+						required
+					/>
+					<button type="submit" class="px-6 py-3 bg-bitcoin-orange text-white font-semibold rounded-lg hover:bg-bitcoin-light transition-colors">
+						Subscribe
+					</button>
+				</form>
+				
+				<p class="text-sm text-gray-500 mt-4">
+					No spam. Only quality content. You can unsubscribe at any time.
+				</p>
+			</div>
+		</div>
+	</section>
+</Layout>

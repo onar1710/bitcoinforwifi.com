@@ -1,0 +1,346 @@
+---
+import { SITE } from '../config.js';
+import SimpleSEO from '../components/SimpleSEO.astro';
+import '../styles/global.css';
+
+export interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+	url?: string;
+	type?: 'website' | 'article';
+	publishedTime?: string;
+	modifiedTime?: string;
+	category?: string;
+	tags?: string[];
+	keywords?: string;
+	author?: string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { 
+	title, 
+	description = SITE.description, 
+	image = SITE.image, 
+	url = canonicalURL,
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	category,
+	tags = [],
+	keywords,
+	author = SITE.author
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="generator" content={Astro.generator} />
+	
+	<!-- Sitemap reference for search engines -->
+	<link rel="sitemap" href="/sitemap-0.xml" type="application/xml" />
+	
+	<!-- SEO Component -->
+	<SimpleSEO 
+		title={title}
+		description={description}
+		image={image}
+		url={typeof url === 'string' ? url : url.href}
+		type={type}
+		publishedTime={publishedTime}
+		modifiedTime={modifiedTime}
+		category={category}
+		tags={tags}
+		keywords={keywords}
+		author={author}
+	/>
+</head>
+<body class="bg-dark text-white min-h-screen">
+	<header class="border-b border-dark-border">
+		<nav class="container mx-auto px-4 py-4">
+			<div class="flex justify-between items-center">
+				<a href="/" class="flex items-center space-x-2">
+					<svg class="w-8 h-8 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+						<path d="M11.938 4.969c-.393-.197-.836-.295-1.23-.295H4.969c-.394 0-.69.295-.69.69v13.872c0 .393.296.689.69.689h3.738c.394 0 .69-.296.69-.69v-5.416h1.311c.394 0 .837-.098 1.23-.295.394-.197.788-.492 1.182-.887.394-.394.69-.788.887-1.182.197-.393.295-.836.295-1.23v-2.463c0-.394-.098-.837-.295-1.23-.197-.394-.492-.788-.887-1.182-.394-.394-.788-.69-1.182-.887z"/>
+					</svg>
+					<span class="text-xl font-bold">BitcoinForWifi</span>
+				</a>
+				
+				<div class="hidden md:flex items-center space-x-6">
+					<a href="/" class="hover:text-bitcoin-orange transition-colors">Home</a>
+					<a href="/blog" class="hover:text-bitcoin-orange transition-colors">Blog</a>
+					<a href="/about" class="hover:text-bitcoin-orange transition-colors">About</a>
+					<a href="/contact" class="hover:text-bitcoin-orange transition-colors">Contact</a>
+					<div class="relative">
+						<input 
+							type="text" 
+							placeholder="Search articles..." 
+							id="search-input"
+							class="w-48 lg:w-64 px-4 py-2 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-bitcoin-orange transition-colors"
+						/>
+						<button 
+							id="search-button"
+							class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-bitcoin-orange transition-colors"
+						>
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				
+				<div class="flex items-center space-x-4 md:hidden">
+					<div class="relative">
+						<input 
+							type="text" 
+							placeholder="Search..." 
+							id="mobile-search-input"
+							class="w-32 px-3 py-1.5 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-bitcoin-orange transition-colors text-sm"
+						/>
+						<button 
+							id="mobile-search-button"
+							class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-bitcoin-orange transition-colors"
+						>
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+							</svg>
+						</button>
+					</div>
+					<button class="md:hidden" id="mobile-menu-button">
+						<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+			
+			<div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
+				<a href="/" class="block py-2 hover:text-bitcoin-orange transition-colors">Home</a>
+				<a href="/blog" class="block py-2 hover:text-bitcoin-orange transition-colors">Blog</a>
+				<a href="/about" class="block py-2 hover:text-bitcoin-orange transition-colors">About</a>
+				<a href="/contact" class="block py-2 hover:text-bitcoin-orange transition-colors">Contact</a>
+			</div>
+		</nav>
+	</header>
+	
+	<main>
+		<!-- Cookie Consent Banner -->
+		<div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-dark-card border-t border-dark-border p-4 z-50 transform translate-y-full transition-transform duration-300">
+			<div class="container mx-auto px-4">
+				<div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+					<div class="flex-1">
+						<p class="text-sm text-gray-300">
+							🍪 We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.
+							<a href="/cookies" class="text-bitcoin-orange hover:underline ml-1">Learn more</a>
+						</p>
+					</div>
+					<div class="flex space-x-3">
+						<button id="accept-all-cookies" class="px-4 py-2 bg-bitcoin-orange text-white text-sm font-medium rounded-lg hover:bg-bitcoin-light transition-colors">
+							Accept All
+						</button>
+						<button id="accept-essential-cookies" class="px-4 py-2 border border-gray-600 text-gray-300 text-sm font-medium rounded-lg hover:border-gray-500 transition-colors">
+							Essential Only
+						</button>
+						<button id="reject-cookies" class="px-4 py-2 text-gray-400 text-sm font-medium hover:text-gray-300 transition-colors">
+							Reject
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<slot />
+	</main>
+	
+	<footer class="border-t border-dark-border mt-16">
+		<div class="container mx-auto px-4 py-8">
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+				<div>
+					<div class="flex items-center space-x-2 mb-4">
+						<svg class="w-6 h-6 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M11.938 4.969c-.393-.197-.836-.295-1.23-.295H4.969c-.394 0-.69.295-.69.69v13.872c0 .393.296.689.69.689h3.738c.394 0 .69-.296.69-.69v-5.416h1.311c.394 0 .837-.098 1.23-.295.394-.197.788-.492 1.182-.887.394-.394.69-.788.887-1.182.197-.393.295-.836.295-1.23v-2.463c0-.394-.098-.837-.295-1.23-.197-.394-.492-.788-.887-1.182-.394-.394-.788-.69-1.182-.887z"/>
+						</svg>
+						<span class="font-bold">BitcoinForWifi</span>
+					</div>
+					<p class="text-gray-400 text-sm mb-4">
+						Your expert source of information about Bitcoin and blockchain technology.
+					</p>
+					<div class="space-y-2 text-gray-400 text-sm">
+						<div class="flex items-center space-x-2">
+							<svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+							</svg>
+							<span>123 Wall Street, New York, NY 10005</span>
+						</div>
+						<div class="flex items-center space-x-2">
+							<svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+							</svg>
+							<span>contact@bitcoinforwifi.com</span>
+						</div>
+						<div class="flex items-center space-x-2">
+							<svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+							</svg>
+							<span>+1 (555) 123-4567</span>
+						</div>
+					</div>
+				</div>
+				
+				<div>
+					<h3 class="font-semibold mb-4">Quick Links</h3>
+					<ul class="space-y-2 text-gray-400">
+						<li><a href="/blog" class="hover:text-bitcoin-orange transition-colors">Blog</a></li>
+						<li><a href="/about" class="hover:text-bitcoin-orange transition-colors">About</a></li>
+						<li><a href="/contact" class="hover:text-bitcoin-orange transition-colors">Contact</a></li>
+					</ul>
+				</div>
+				
+				<div>
+					<h3 class="font-semibold mb-4">Legal</h3>
+					<ul class="space-y-2 text-gray-400">
+						<li><a href="/privacy" class="hover:text-bitcoin-orange transition-colors">Privacy Policy</a></li>
+						<li><a href="/terms" class="hover:text-bitcoin-orange transition-colors">Terms of Service</a></li>
+						<li><a href="/disclaimer" class="hover:text-bitcoin-orange transition-colors">Financial Disclaimer</a></li>
+						<li><a href="/cookies" class="hover:text-bitcoin-orange transition-colors">Cookie Policy</a></li>
+					</ul>
+				</div>
+				
+				<div>
+					<h3 class="font-semibold mb-4">Follow Me</h3>
+					<div class="flex space-x-4">
+						<a href="#" class="text-gray-400 hover:text-bitcoin-orange transition-colors">
+							<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+							</svg>
+						</a>
+						<a href="#" class="text-gray-400 hover:text-bitcoin-orange transition-colors">
+							<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="border-t border-dark-border mt-8 pt-8 text-center text-gray-400 text-sm">
+				<p>&copy; 2024 BitcoinForWifi. All rights reserved.</p>
+				<p class="mt-2">
+					<a href="/privacy" class="hover:text-bitcoin-orange transition-colors">Privacy</a> • 
+					<a href="/terms" class="hover:text-bitcoin-orange transition-colors">Terms</a> • 
+					<a href="/disclaimer" class="hover:text-bitcoin-orange transition-colors">Disclaimer</a> • 
+					<a href="/cookies" class="hover:text-bitcoin-orange transition-colors">Cookies</a>
+				</p>
+			</div>
+		</div>
+	</footer>
+	
+	<script>
+		// Mobile Menu Toggle
+		const mobileMenuButton = document.getElementById('mobile-menu-button');
+		const mobileMenu = document.getElementById('mobile-menu');
+		
+		mobileMenuButton.addEventListener('click', () => {
+			mobileMenu.classList.toggle('hidden');
+		});
+
+		// Cookie Consent Banner
+		const cookieBanner = document.getElementById('cookie-banner');
+		const acceptAllBtn = document.getElementById('accept-all-cookies');
+		const acceptEssentialBtn = document.getElementById('accept-essential-cookies');
+		const rejectBtn = document.getElementById('reject-cookies');
+
+		// Check if user has already made a choice
+		const cookieConsent = localStorage.getItem('cookie-consent');
+		
+		if (!cookieConsent) {
+			// Show banner after a short delay
+			setTimeout(() => {
+				cookieBanner.classList.remove('translate-y-full');
+			}, 1000);
+		}
+
+		// Hide banner and save choice
+		function hideBanner(choice: string) {
+			cookieBanner.classList.add('translate-y-full');
+			localStorage.setItem('cookie-consent', choice);
+			
+			// Here you would typically load the appropriate scripts
+			// For demo purposes, we'll just log the choice
+			console.log('Cookie consent choice:', choice);
+			
+			// Load analytics if accepted
+			if (choice === 'all') {
+				// Load Google Analytics or other tracking scripts
+				console.log('Loading analytics...');
+				// Example: loadGoogleAnalytics();
+			}
+		}
+
+		acceptAllBtn.addEventListener('click', () => hideBanner('all'));
+		acceptEssentialBtn.addEventListener('click', () => hideBanner('essential'));
+		rejectBtn.addEventListener('click', () => hideBanner('reject'));
+
+		// Search Functionality
+		const searchInput = document.getElementById('search-input');
+		const mobileSearchInput = document.getElementById('mobile-search-input');
+		const searchButton = document.getElementById('search-button');
+		const mobileSearchButton = document.getElementById('mobile-search-button');
+
+		function performSearch(query: string) {
+			if (query.trim()) {
+				// Redirect to search results page or filter content
+				console.log('Searching for:', query);
+				// For demo, we'll just alert
+				// In a real app, you would navigate to search results
+				// window.location.href = `/search?q=${encodeURIComponent(query)}`;
+				alert(`Searching for: ${query}\n\nIn a real application, this would show search results.`);
+			}
+		}
+
+		// Desktop search
+		searchButton.addEventListener('click', () => {
+			const input = searchInput as HTMLInputElement;
+			performSearch(input.value);
+		});
+
+		searchInput.addEventListener('keypress', (e: KeyboardEvent) => {
+			const target = e.target as HTMLInputElement;
+			if (e.key === 'Enter') {
+				performSearch(target.value);
+			}
+		});
+
+		// Mobile search
+		mobileSearchButton.addEventListener('click', () => {
+			const input = mobileSearchInput as HTMLInputElement;
+			performSearch(input.value);
+		});
+
+		mobileSearchInput.addEventListener('keypress', (e: KeyboardEvent) => {
+			const target = e.target as HTMLInputElement;
+			if (e.key === 'Enter') {
+				performSearch(target.value);
+			}
+		});
+
+		// Sync search inputs
+		searchInput.addEventListener('input', (e: Event) => {
+			const target = e.target as HTMLInputElement;
+			const mobileTarget = mobileSearchInput as HTMLInputElement;
+			mobileTarget.value = target.value;
+		});
+
+		mobileSearchInput.addEventListener('input', (e: Event) => {
+			const target = e.target as HTMLInputElement;
+			const desktopTarget = searchInput as HTMLInputElement;
+			desktopTarget.value = target.value;
+		});
+	</script>
+</body>
+</html>
