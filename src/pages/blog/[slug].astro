@@ -1,144 +1,51 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getPostBySlug, getPublishedPosts } from '../../data/blog-posts.js';
+import { processInternalLinks, generateRelatedArticlesSection } from '../../utils/internalLinking.js';
 
 export const PAGINATION = {
   postsPerPage: 6
 };
 
 export async function getStaticPaths() {
-  // Mock data - in a real project this would read MDX files
-  const posts = [
-    {
-      slug: 'first-steps-bitcoin',
-      title: 'First Steps in the Bitcoin World',
-      description: 'Complete guide for beginners who want to start their journey in the Bitcoin ecosystem.',
-      date: '2024-03-15',
-      readTime: '5 min read',
-      category: 'Guide',
-      author: 'Bitcoin Expert',
-      content: `
-# First Steps in the Bitcoin World
-
-Welcome to the fascinating world of Bitcoin. If you're new to cryptocurrencies, this guide will help you understand the basic concepts and take your first steps with confidence.
-
-## What is Bitcoin?
-
-Bitcoin is a decentralized cryptocurrency created in 2009 by a person or group known as Satoshi Nakamoto. Unlike traditional currencies, Bitcoin is not controlled by any government or financial institution.
-
-### Main Features
-
-- **Decentralization**: There is no central authority controlling Bitcoin
-- **Transparency**: All transactions are public on the blockchain
-- **Security**: Advanced cryptography protects your funds
-- **Limited Supply**: Only 21 million bitcoins will ever exist
-
-## How to Get Started
-
-### 1. Education
-
-Before investing, it's essential to understand how Bitcoin works. Take time to learn about:
-
-- Blockchain technology
-- Wallets and secure storage
-- Risks and benefits
-- Market analysis
-
-### 2. Create a Wallet
-
-You'll need a digital wallet to store your bitcoins. Options include:
-
-- **Software wallets**: Apps for your computer or mobile
-- **Hardware wallets**: Physical devices for maximum security
-- **Paper wallets**: Paper storage for long-term holding
-
-### 3. Buy Bitcoin
-
-You can buy Bitcoin through:
-
-- Cryptocurrency exchanges
-- Bitcoin ATMs
-- P2P (person-to-person) trading
-- Broker services
-
-## Tips for Beginners
-
-### Start with Small Amounts
-
-Don't invest more than you're willing to lose. Start with small amounts to familiarize yourself with the process.
-
-### Maintain Security
-
-- Use strong, unique passwords
-- Enable two-factor authentication
-- Consider using a hardware wallet for significant amounts
-- Never share your private keys
-
-### Be Patient
-
-Bitcoin prices can be volatile. Don't make impulsive decisions based on short-term price movements.
-
-## Common Mistakes to Avoid
-
-1. **Not doing your own research** (DYOR)
-2. **Following advice without verification**
-3. **Storing everything on exchanges**
-4. **Forgetting to backup your wallets**
-5. **Panicking during price drops**
-
-## Useful Resources
-
-- [Bitcoin.org](https://bitcoin.org/) - Official Bitcoin site
-- [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf) - Satoshi's original document
-- Bitcoin forums and communities
-- Educational courses on cryptocurrencies
-
-## Conclusion
-
-Bitcoin represents a revolutionary innovation in the world of finance. While it may seem complex at first, with proper education and a prudent approach, anyone can participate in this new digital economy.
-
-Remember to always do your own research and never invest more than you can afford to lose.
-
----
-
-*Ready to start your Bitcoin journey? Keep learning and explore the opportunities offered by this incredible technology.*
-      `
-    }
-  ];
-
+  const posts = getPublishedPosts();
+  
   return posts.map(post => ({
     params: { slug: post.slug },
     props: post
   }));
 }
 
-const { title, description, date, readTime, category, author, content } = Astro.props;
+const post = Astro.props;
+const processedContent = processInternalLinks(post);
+const relatedArticles = generateRelatedArticlesSection(post, 3);
 ---
 
-<Layout title={title}>
+<Layout title={post.title}>
 	<article class="py-20">
 		<div class="container mx-auto px-4 max-w-4xl">
 			<!-- Header -->
 			<header class="mb-12">
 				<div class="flex items-center space-x-2 text-sm text-gray-400 mb-4">
 					<span class="px-3 py-1 bg-bitcoin-orange text-white text-xs font-semibold rounded-full">
-						{category}
+						{post.category}
 					</span>
-					<time datetime={date}>
-						{new Date(date).toLocaleDateString('en-US', { 
+					<time datetime={post.date}>
+						{new Date(post.date).toLocaleDateString('en-US', { 
 							year: 'numeric', 
 							month: 'long', 
 							day: 'numeric' 
 						})}
 					</time>
 					<span>•</span>
-					<span>{readTime}</span>
+					<span>{post.readTime}</span>
 				</div>
 				
 				<h1 class="text-4xl md:text-5xl font-bold mb-6">
-					<span class="gradient-text">{title}</span>
+					<span class="gradient-text">{post.title}</span>
 				</h1>
 				
-				<p class="text-xl text-gray-300 mb-8">{description}</p>
+				<p class="text-xl text-gray-300 mb-8">{post.description}</p>
 				
 				<!-- Author Info -->
 				<div class="flex items-center space-x-4 p-4 bg-dark-card border border-dark-border rounded-lg">
@@ -148,33 +55,46 @@ const { title, description, date, readTime, category, author, content } = Astro.
 						</svg>
 					</div>
 					<div>
-						<div class="font-semibold">{author}</div>
+						<div class="font-semibold">{post.author}</div>
 						<div class="text-sm text-gray-400">Expert Bitcoin Analyst</div>
 					</div>
 				</div>
 			</header>
 			
-			<!-- Content -->
+			<!-- Content with Internal Links -->
 			<div class="prose prose-lg prose-invert max-w-none">
-				<Fragment set:html={content} />
+				<Fragment set:html={processedContent.content} />
 			</div>
+			
+			<!-- Internal Links Summary -->
+			{processedContent.internalLinks.length > 0 && (
+				<div class="mt-12 p-6 bg-dark-card border border-dark-border rounded-lg">
+					<h3 class="text-lg font-semibold mb-4">Enlaces Internos en este Artículo</h3>
+					<div class="space-y-2">
+						{processedContent.internalLinks.map(link => (
+							<div class="flex items-center space-x-2">
+								<svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+								</svg>
+								<a href={link.url} class="text-bitcoin-orange hover:text-bitcoin-light transition-colors">
+									{link.anchorText}
+								</a>
+								<span class="text-gray-500 text-sm">→ {link.title}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
 			
 			<!-- Tags -->
 			<div class="mt-12 pt-8 border-t border-dark-border">
 				<h3 class="text-lg font-semibold mb-4">Tags</h3>
 				<div class="flex flex-wrap gap-2">
-					<span class="px-3 py-1 bg-dark border border-dark-border text-gray-300 text-sm rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors cursor-pointer">
-						Bitcoin
-					</span>
-					<span class="px-3 py-1 bg-dark border border-dark-border text-gray-300 text-sm rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors cursor-pointer">
-						Beginners
-					</span>
-					<span class="px-3 py-1 bg-dark border border-dark-border text-gray-300 text-sm rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors cursor-pointer">
-						Guide
-					</span>
-					<span class="px-3 py-1 bg-dark border border-dark-border text-gray-300 text-sm rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors cursor-pointer">
-						Cryptocurrencies
-					</span>
+					{post.tags.map(tag => (
+						<span class="px-3 py-1 bg-dark border border-dark-border text-gray-300 text-sm rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors cursor-pointer">
+							{tag}
+						</span>
+					))}
 				</div>
 			</div>
 			
@@ -197,25 +117,19 @@ const { title, description, date, readTime, category, author, content } = Astro.
 			<!-- Related Posts -->
 			<div class="mt-16 pt-8 border-t border-dark-border">
 				<h3 class="text-2xl font-bold mb-8">
-						<span class="gradient-text">Related Articles</span>
+					<span class="gradient-text">Related Articles</span>
 				</h3>
 				
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<article class="bg-dark-card border border-dark-border rounded-lg p-6 card-hover">
-						<h4 class="text-lg font-semibold mb-3 hover:text-bitcoin-orange transition-colors">
-							<a href="/blog/blockchain-explained">Blockchain Explained for Humans</a>
-						</h4>
-							<p class="text-gray-400 mb-3">Understand the technology behind Bitcoin in a simple and clear way.</p>
-							<div class="text-sm text-gray-500">8 min read</div>
-					</article>
-					
-					<article class="bg-dark-card border border-dark-border rounded-lg p-6 card-hover">
-						<h4 class="text-lg font-semibold mb-3 hover:text-bitcoin-orange transition-colors">
-							<a href="/blog/bitcoin-wallets-security">Bitcoin Wallets: Security Guide</a>
-						</h4>
-							<p class="text-gray-400 mb-3">Learn to protect your bitcoins with the best security practices.</p>
-							<div class="text-sm text-gray-500">10 min read</div>
-					</article>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{relatedArticles.map(relatedPost => (
+						<article class="bg-dark-card border border-dark-border rounded-lg p-6 card-hover">
+							<h4 class="text-lg font-semibold mb-3 hover:text-bitcoin-orange transition-colors">
+								<a href={`/blog/${relatedPost.slug}`}>{relatedPost.title}</a>
+							</h4>
+							<p class="text-gray-400 mb-3">{relatedPost.description}</p>
+							<div class="text-sm text-gray-500">{relatedPost.readTime}</div>
+						</article>
+					))}
 				</div>
 			</div>
 		</div>

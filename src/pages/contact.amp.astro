@@ -1,0 +1,636 @@
+---
+const SITE = {
+  title: 'Contact - BitcoinForWifi',
+  description: 'Have questions about Bitcoin or want to collaborate? Get in touch with the BitcoinForWifi team.',
+  url: 'https://bitcoinforwifi.com/contact'
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <title>{SITE.title}</title>
+    <meta name="description" content={SITE.description}>
+    
+    <!-- AMP Boilerplate -->
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
+    <noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    
+    <!-- AMP Runtime -->
+    <script async src="https://cdn.ampproject.org/v0.js" is:inline></script>
+    
+    <!-- AMP Components -->
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js" is:inline></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js" is:inline></script>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={SITE.url}>
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json" is:inline>
+    {
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "name": {JSON.stringify(SITE.title)},
+        "description": {JSON.stringify(SITE.description)},
+        "url": {JSON.stringify(SITE.url)},
+        "publisher": {
+            "@type": "Organization",
+            "name": "BitcoinForWifi",
+            "url": "https://bitcoinforwifi.com"
+        },
+        "mainEntity": {
+            "@type": "Organization",
+            "name": "BitcoinForWifi",
+            "url": "https://bitcoinforwifi.com",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+1 (555) 123-4567",
+                "contactType": "customer service",
+                "email": "contact@bitcoinforwifi.com",
+                "availableLanguage": ["English"],
+                "hoursAvailable": "Mo-Fr 09:00-18:00"
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "123 Wall Street",
+                "addressLocality": "New York",
+                "addressRegion": "NY",
+                "postalCode": "10005",
+                "addressCountry": "US"
+            }
+        }
+    }
+    </script>
+    
+    <style amp-custom>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #f7931a 0%, #ffad33 100%);
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-alt {
+            background: #f8f9fa;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        @media (min-width: 1024px) {
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .contact-form-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #f7931a;
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .checkbox-input {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .checkbox-label {
+            flex: 1;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: #f7931a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #e68519;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .info-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: #f7931a;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .contact-icon svg {
+            width: 25px;
+            height: 25px;
+            fill: white;
+        }
+        
+        .contact-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .contact-details p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover {
+            background: #f7931a;
+            border-color: #f7931a;
+        }
+        
+        .social-link:hover .social-icon {
+            color: white;
+        }
+        
+        .social-link:hover .social-text {
+            color: white;
+        }
+        
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            color: #666;
+            transition: color 0.3s;
+        }
+        
+        .social-text {
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .faq-section {
+            margin-top: 30px;
+        }
+        
+        .faq-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e9ecef;
+            padding: 20px 0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        .success-message,
+        .error-message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .contact-form-card,
+            .info-card {
+                padding: 25px;
+            }
+            
+            .form-title,
+            .info-title,
+            .faq-title {
+                font-size: 1.5rem;
+            }
+            
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <h1>Get in Touch</h1>
+            <p>Have questions about Bitcoin or want to collaborate? We'd love to hear from you.</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form-card">
+                    <h2 class="form-title">Send us a Message</h2>
+                    
+                    <form method="post" action-xhr="/contact" target="_top">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Name *</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                required
+                                class="form-input"
+                                placeholder="John Doe"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email *</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="form-input"
+                                placeholder="john@example.com"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject *</label>
+                            <select
+                                id="subject"
+                                name="subject"
+                                required
+                                class="form-select"
+                            >
+                                <option value="">Select a topic</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="collaboration">Collaboration</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="press">Press & Media</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message *</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="5"
+                                required
+                                class="form-textarea"
+                                placeholder="Tell us what's on your mind..."
+                            ></textarea>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input
+                                type="checkbox"
+                                id="newsletter"
+                                name="newsletter"
+                                class="checkbox-input"
+                            />
+                            <label for="newsletter" class="checkbox-label">
+                                I'd like to receive the BitcoinForWifi newsletter with latest updates and insights.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            Send Message
+                        </button>
+                        
+                        <div submit-success>
+                            <div class="success-message">
+                                Thank you for your message! We'll get back to you soon.
+                            </div>
+                        </div>
+                        
+                        <div submit-error>
+                            <div class="error-message">
+                                There was an error sending your message. Please try again.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div>
+                    <div class="info-card">
+                        <h2 class="info-title">Contact Information</h2>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Office Address</h3>
+                                <p>
+                                    123 Wall Street<br>
+                                    New York, NY 10005<br>
+                                    United States
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <p>
+                                    contact@bitcoinforwifi.com<br>
+                                    support@bitcoinforwifi.com
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Phone</h3>
+                                <p>
+                                    +1 (917) 734-5678<br>
+                                    Mon-Fri 9:00 AM - 6:00 PM EST
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="info-card">
+                        <h2 class="info-title">Connect With Us</h2>
+                        <p style="color: #666; margin-bottom: 20px;">
+                            Follow us on social media for the latest Bitcoin insights and updates.
+                        </p>
+                        
+                        <div class="social-grid">
+                            <a href="#" class="social-link">
+                                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                                </svg>
+                                <span class="social-text">Twitter</span>
+                            </a>
+
+                            <a href="#" class="social-link">
+                                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                                </svg>
+                                <span class="social-text">GitHub</span>
+                            </a>
+
+                            <a href="#" class="social-link">
+                                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                                    <circle cx="4" cy="4" r="2"/>
+                                </svg>
+                                <span class="social-text">LinkedIn</span>
+                            </a>
+
+                            <a href="#" class="social-link">
+                                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 004.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                                </svg>
+                                <span class="social-text">Discord</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Section -->
+                    <div class="info-card">
+                        <h2 class="info-title">Frequently Asked Questions</h2>
+                        
+                        <div class="faq-item">
+                            <h3 class="faq-question">How quickly do you respond to inquiries?</h3>
+                            <p class="faq-answer">
+                                We typically respond within 24-48 hours during business days. For urgent matters, please call us directly.
+                            </p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3 class="faq-question">Do you offer consulting services?</h3>
+                            <p class="faq-answer">
+                                Yes, we offer Bitcoin consulting services. Please select "Collaboration" as the subject and we'll get back to you with details.
+                            </p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3 class="faq-question">Can I contribute content to BitcoinForWifi?</h3>
+                            <p class="faq-answer">
+                                We're always looking for expert contributors! Send us a message with your background and writing samples.
+                            </p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3 class="faq-question">Do you provide investment advice?</h3>
+                            <p class="faq-answer">
+                                No, we provide educational content only. For investment advice, please consult with a qualified financial advisor.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 BitcoinForWifi. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                <a href="/privacy" style="color: #f7931a; text-decoration: none; margin: 0 10px;">Privacy</a> • 
+                <a href="/terms" style="color: #f7931a; text-decoration: none; margin: 0 10px;">Terms</a> • 
+                <a href="/disclaimer" style="color: #f7931a; text-decoration: none; margin: 0 10px;">Disclaimer</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

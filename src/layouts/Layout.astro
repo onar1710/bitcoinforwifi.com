@@ -37,6 +37,159 @@ const {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<!-- Critical CSS for above-fold content -->
+
+<!-- Resource hints for performance -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.ampproject.org" crossorigin>
+
+<style>
+:root {
+  --bitcoin-orange: #f7931a;
+  --bitcoin-dark: #333;
+  --text-light: #666;
+  --bg-light: #f8f9fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--bitcoin-dark);
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  background: linear-gradient(135deg, var(--bitcoin-orange) 0%, #ffad33 100%);
+  color: white;
+  padding: 1rem 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Accessibility: Focus indicators */
+.nav-link:focus-visible,
+.cta-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  display: inline-block;
+  background: white;
+  color: var(--bitcoin-orange);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 2px solid transparent;
+}
+
+.cta-button:hover,
+.cta-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--bitcoin-orange);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0 0 4px 4px;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
+}
+</style>
+
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -59,6 +212,46 @@ const {
 		keywords={keywords}
 		author={author}
 	/>
+
+<!-- Web Vitals Monitoring -->
+<script is:inline>
+// Core Web Vitals monitoring
+function sendToAnalytics(metric) {
+  console.log('Web Vital:', metric.name, metric.value, metric.rating);
+  
+  // Send to your analytics service
+  if (typeof gtag !== 'undefined') {
+    gtag('event', metric.name, {
+      value: Math.round(metric.value),
+      metric_id: metric.id,
+      metric_value: metric.value,
+      metric_rating: metric.rating
+    });
+  }
+}
+
+// Load web-vitals library
+(function() {
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js';
+  script.onload = function() {
+    // Core Web Vitals monitoring
+    webVitals.onLCP(sendToAnalytics);
+    webVitals.onINP(sendToAnalytics);
+    webVitals.onCLS(sendToAnalytics);
+  };
+  document.head.appendChild(script);
+})();
+
+// Performance observer for LCP element identification
+if ('PerformanceObserver' in window) {
+  new PerformanceObserver((list) => {
+    const entries = list.getEntries();
+    const lastEntry = entries[entries.length - 1];
+    console.log('LCP element:', lastEntry.element);
+  }).observe({ type: 'largest-contentful-paint', buffered: true });
+}
+</script>
 </head>
 <body class="bg-dark text-white min-h-screen">
 	<header class="border-b border-dark-border">
@@ -128,7 +321,7 @@ const {
 		</nav>
 	</header>
 	
-	<main>
+	<main id="main-content">
 		<!-- Cookie Consent Banner -->
 		<div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-dark-card border-t border-dark-border p-4 z-50 transform translate-y-full transition-transform duration-300">
 			<div class="container mx-auto px-4">
@@ -187,7 +380,7 @@ const {
 							<svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
 								<path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
 							</svg>
-							<span>+1 (555) 123-4567</span>
+							<span>+1 (917) 734-5678</span>
 						</div>
 					</div>
 				</div>

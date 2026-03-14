@@ -1,0 +1,561 @@
+---
+import { formatDate } from '../utils/dateUtils.js';
+
+const SITE = {
+  title: 'About - BitcoinForWifi',
+  description: 'Learn about BitcoinForWifi - passionate experts in cryptocurrencies dedicated to sharing knowledge about Bitcoin and blockchain technology.',
+  url: 'https://bitcoinforwifi.com/about'
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <title>{SITE.title}</title>
+    <meta name="description" content={SITE.description}>
+    
+    <!-- AMP Boilerplate -->
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
+    <noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    
+    <!-- AMP Runtime -->
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    
+    <!-- AMP Components -->
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={SITE.url}>
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        "name": "{SITE.title}",
+        "description": "{SITE.description}",
+        "url": "{SITE.url}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "BitcoinForWifi",
+            "url": "https://bitcoinforwifi.com"
+        },
+        "mainEntity": {
+            "@type": "Organization",
+            "name": "BitcoinForWifi",
+            "description": "Expert blog on Bitcoin and cryptocurrency investing",
+            "url": "https://bitcoinforwifi.com",
+            "foundingDate": "2024",
+            "founder": {
+                "@type": "Person",
+                "name": "Michael Anderson",
+                "jobTitle": "Founder & Editor in Chief"
+            },
+            "employee": [
+                {
+                    "@type": "Person",
+                    "name": "Sarah Johnson",
+                    "jobTitle": "Technical Analyst"
+                },
+                {
+                    "@type": "Person", 
+                    "name": "David Thompson",
+                    "jobTitle": "Blockchain Developer"
+                }
+            ]
+        }
+    }
+    </script>
+    
+    <style amp-custom>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #f7931a 0%, #ffad33 100%);
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-alt {
+            background: #f8f9fa;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+        
+        .mission-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .mission-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #f7931a;
+        }
+        
+        .mission-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #f7931a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .feature-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .why-item h3 {
+            font-size: 1.3rem;
+            color: #f7931a;
+            margin-bottom: 15px;
+        }
+        
+        .why-item p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            background: #f7931a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .team-avatar svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        
+        .team-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .team-role {
+            color: #f7931a;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .team-bio {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #f7931a 0%, #ffad33 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .cta-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .cta-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f7931a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #e68519;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #f7931a;
+            color: #f7931a;
+        }
+        
+        .btn-secondary:hover {
+            background: #f7931a;
+            color: white;
+        }
+        
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .mission-card {
+                padding: 20px;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <h1>About BitcoinForWifi</h1>
+            <p>We are passionate experts in the world of cryptocurrencies, dedicated to sharing knowledge and deep analysis about Bitcoin and blockchain technology.</p>
+        </div>
+    </header>
+
+    <section class="section section-alt">
+        <div class="container">
+            <div class="mission-card">
+                <h2 class="mission-title">Our Mission</h2>
+                <p class="mission-description">
+                    At BitcoinForWifi, our mission is to democratize knowledge about Bitcoin and cryptocurrencies. We believe everyone should have access to clear, accurate, and reliable information about this financial revolution.
+                </p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Education</h3>
+                        <p class="feature-description">Quality educational content for all levels</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Excellence</h3>
+                        <p class="feature-description">Deep analysis and high-quality content</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 16c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Accessibility</h3>
+                        <p class="feature-description">Making cryptocurrencies understandable for everyone</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Why Bitcoin?</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 40px; font-size: 1.1rem;">
+                Bitcoin is not just a cryptocurrency, it's a revolutionary technology that is changing the way we understand money, transactions and trust in digital systems.
+            </p>
+            
+            <div class="why-grid">
+                <div class="why-item">
+                    <h3>Innovative Technology</h3>
+                    <p>Bitcoin's blockchain represents a technological advance comparable to the invention of the internet. Its ability to create decentralized consensus opens infinite possibilities.</p>
+                </div>
+                
+                <div class="why-item">
+                    <h3>Financial Inclusion</h3>
+                    <p>Bitcoin offers access to financial services to billions of people who are currently excluded from the traditional banking system.</p>
+                </div>
+                
+                <div class="why-item">
+                    <h3>Asset Protection</h3>
+                    <p>In a world of growing inflation, Bitcoin offers an alternative to protect the value of money in the long term with its limited supply.</p>
+                </div>
+                
+                <div class="why-item">
+                    <h3>Individual Sovereignty</h3>
+                    <p>Bitcoin gives you complete control over your funds, without depending on third parties or intermediaries that can block or confiscate your assets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Our Team</h2>
+            
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="team-name">Michael Anderson</h3>
+                    <p class="team-role">Founder & Editor in Chief</p>
+                    <p class="team-bio">Blockchain expert with 8+ years of experience</p>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="team-name">Sarah Johnson</h3>
+                    <p class="team-role">Technical Analyst</p>
+                    <p class="team-bio">Specialist in trading and market analysis</p>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="team-name">David Thompson</h3>
+                    <p class="team-role">Blockchain Developer</p>
+                    <p class="team-bio">Expert in smart contracts and DeFi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="stats-section">
+                <h2 class="section-title" style="color: white;">Our Impact</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">150+</div>
+                        <div class="stat-label">Published Articles</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">Monthly Readers</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Newsletter Subscribers</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Join the Community</h2>
+            <p class="cta-description">
+                Want to learn more about Bitcoin and cryptocurrencies? 
+                Explore our articles or subscribe to our newsletter.
+            </p>
+            
+            <div>
+                <a href="/blog" class="btn">Explore Blog</a>
+                <a href="#newsletter" class="btn btn-secondary">Subscribe</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 BitcoinForWifi. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                <a href="/privacy" style="color: #f7931a; text-decoration: none; margin: 0 10px;">Privacy</a> • 
+                <a href="/terms" style="color: #f7931a; text-decoration: none; margin: 0 10px;">Terms</a> • 
+                <a href="/disclaimer" style="color: #f7931a; text-decoration: none; margin: 0 10px;">Disclaimer</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
