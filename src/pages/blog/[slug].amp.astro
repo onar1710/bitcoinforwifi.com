@@ -1,105 +1,23 @@
 ---
+import { blogPosts } from '../../data/blog-posts.js';
+
 export const PAGINATION = {
   postsPerPage: 6
 };
 
 export async function getStaticPaths() {
-  // Mock data - in a real project this would read MDX files
-  const posts = [
-    {
-      slug: 'first-steps-bitcoin',
-      title: 'First Steps in the Bitcoin World',
-      description: 'Complete guide for beginners who want to start their journey in the Bitcoin ecosystem.',
-      date: '2024-03-15',
-      readTime: '5 min read',
-      category: 'Guide',
-      author: 'Bitcoin Expert',
-      content: `# First Steps in the Bitcoin World
-
-Welcome to the fascinating world of Bitcoin. If you're new to cryptocurrencies, this guide will help you understand the basic concepts and take your first steps with confidence.
-
-## What is Bitcoin?
-
-Bitcoin is a decentralized cryptocurrency created in 2009 by a person or group known as Satoshi Nakamoto. Unlike traditional currencies, Bitcoin is not controlled by any government or financial institution.
-
-### Main Features
-
-- **Decentralization**: There is no central authority controlling Bitcoin
-- **Transparency**: All transactions are public on the blockchain
-- **Security**: Advanced cryptography protects your funds
-- **Limited Supply**: Only 21 million bitcoins will ever exist
-
-## How to Get Started
-
-### 1. Education
-
-Before investing, it's essential to understand how Bitcoin works. Take time to learn about:
-
-- Blockchain technology
-- Wallets and secure storage
-- Risks and benefits
-- Market analysis
-
-### 2. Create a Wallet
-
-You'll need a digital wallet to store your bitcoins. Options include:
-
-- **Software wallets**: Apps for your computer or mobile
-- **Hardware wallets**: Physical devices for maximum security
-- **Paper wallets**: Paper storage for long-term holding
-
-### 3. Buy Bitcoin
-
-You can buy Bitcoin through:
-
-- Cryptocurrency exchanges
-- Bitcoin ATMs
-- P2P (person-to-person) trading
-- Broker services
-
-## Tips for Beginners
-
-### Start with Small Amounts
-
-Don't invest more than you're willing to lose. Start with small amounts to familiarize yourself with the process.
-
-### Maintain Security
-
-- Use strong, unique passwords
-- Enable two-factor authentication
-- Consider using a hardware wallet for significant amounts
-- Never share your private keys
-
-### Be Patient
-
-Bitcoin prices can be volatile. Don't make impulsive decisions based on short-term price movements.
-
-## Common Mistakes to Avoid
-
-1. **Not doing your own research** (DYOR)
-2. **Following advice without verification**
-3. **Storing everything on exchanges**
-4. **Forgetting to backup your wallets**
-5. **Panicking during price drops
-
-## Useful Resources
-
-- [Bitcoin.org](https://bitcoin.org/) - Official Bitcoin site
-- [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf) - Satoshi's original document
-- Bitcoin forums and communities
-- Educational courses on cryptocurrencies
-
-## Conclusion
-
-Bitcoin represents a revolutionary innovation in the world of finance. While it may seem complex at first, with proper education and a prudent approach, anyone can participate in this new digital economy.
-
-Remember to always do your own research and never invest more than you can afford to lose.
-
----
-
-*Ready to start your Bitcoin journey? Keep learning and explore the opportunities offered by this incredible technology.*`
-    }
-  ];
+  const posts = blogPosts
+    .filter(post => post.published)
+    .map(post => ({
+      slug: post.slug,
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      readTime: post.readTime,
+      category: post.category,
+      author: post.author,
+      content: post.content
+    }));
 
   return posts.map(post => ({
     params: { slug: post.slug },

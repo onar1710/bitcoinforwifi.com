@@ -123,21 +123,6 @@ export const blogPosts: BlogPost[] = [
     published: true,
     modifiedTime: '2026-03-14T13:49:41.427Z'
   },
-  {
-    slug: 'first-steps-bitcoin',
-    title: "First Steps in the Bitcoin World",
-    description: "Complete guide for beginners who want to start their journey in the Bitcoin ecosystem.",
-    content: "# First Steps in the Bitcoin World\n\nWelcome to the fascinating world of Bitcoin. If you're new to cryptocurrencies, this guide will help you understand the basic concepts and take your first steps with confidence.\n\n## What is Bitcoin?\n\nBitcoin is a decentralized cryptocurrency created in 2009 by a person or group known as Satoshi Nakamoto. Unlike traditional currencies, Bitcoin is not controlled by any government or financial institution.\n\n### Main Features\n\n- **Decentralization**: There is no central authority controlling Bitcoin\n- **Transparency**: All transactions are public on the blockchain\n- **Security**: Advanced cryptography protects your funds\n- **Limited Supply**: Only 21 million bitcoins will ever exist\n\n## How to Get Started\n\n### 1. Education\n\nBefore investing, it's essential to understand how Bitcoin works. Take time to learn about:\n\n- Blockchain technology\n- Wallets and secure storage\n- Risks and benefits\n- Market analysis\n\n### 2. Create a Wallet\n\nYou'll need a digital wallet to store your bitcoins. Options include:\n\n- **Software wallets**: Apps for your computer or mobile\n- **Hardware wallets**: Physical devices for maximum security\n- **Paper wallets**: Paper storage for long-term holding\n\n### 3. Buy Bitcoin\n\nYou can buy Bitcoin through:\n\n- Cryptocurrency exchanges\n- Bitcoin ATMs\n- P2P (person-to-person) trading\n- Broker services\n\n## Tips for Beginners\n\n### Start with Small Amounts\n\nDon't invest more than you're willing to lose. Start with small amounts to familiarize yourself with the process.\n\n### Maintain Security\n\n- Use strong, unique passwords\n- Enable two-factor authentication\n- Consider using a hardware wallet for significant amounts\n- Never share your private keys\n\n### Be Patient\n\nBitcoin prices can be volatile. Don't make impulsive decisions based on short-term price movements.\n\n## Common Mistakes to Avoid\n\n1. **Not doing your own research** (DYOR)\n2. **Following advice without verification**\n3. **Storing everything on exchanges**\n4. **Forgetting to backup your wallets**\n5. **Panicking during price drops\n\n## Useful Resources\n\n- [Bitcoin.org](https://bitcoin.org/) - Official Bitcoin site\n- [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf) - Satoshi's original document\n- Bitcoin forums and communities\n- Educational courses on cryptocurrencies\n\n## Conclusion\n\nBitcoin represents a revolutionary innovation in the world of finance. While it may seem complex at first, with proper education and a prudent approach, anyone can participate in this new digital economy.\n\nRemember to always do your own research and never invest more than you can afford to lose.\n\n---\n\n*Ready to start your Bitcoin journey? Keep learning and explore the opportunities offered by this incredible technology.*",
-    date: '2024-03-15',
-    readTime: "5 min read",
-    category: "Guide",
-    author: "Bitcoin Expert",
-    image: "/blog/default.jpg",
-    tags: [],
-    featured: false,
-    published: true,
-    modifiedTime: '2026-03-14T13:49:41.427Z'
-  }
 ];
 
 // Helper functions

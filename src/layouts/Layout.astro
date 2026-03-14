@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../config.js';
 import SimpleSEO from '../components/SimpleSEO.astro';
+import NormalSEO from '../components/NormalSEO.astro';
 import '../styles/global.css';
 
 export interface Props {
@@ -18,6 +19,9 @@ export interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Detectar si es una página AMP
+const isAmpPage = Astro.url.pathname.includes('.amp');
 
 const { 
 	title, 
@@ -199,19 +203,35 @@ body {
 	<link rel="sitemap" href="/sitemap-0.xml" type="application/xml" />
 	
 	<!-- SEO Component -->
-	<SimpleSEO 
-		title={title}
-		description={description}
-		image={image}
-		url={typeof url === 'string' ? url : url.href}
-		type={type}
-		publishedTime={publishedTime}
-		modifiedTime={modifiedTime}
-		category={category}
-		tags={tags}
-		keywords={keywords}
-		author={author}
-	/>
+	{isAmpPage ? (
+		<SimpleSEO 
+			title={title}
+			description={description}
+			image={image}
+			url={typeof url === 'string' ? url : url.href}
+			type={type}
+			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
+			category={category}
+			tags={tags}
+			keywords={keywords}
+			author={author}
+		/>
+	) : (
+		<NormalSEO 
+			title={title}
+			description={description}
+			image={image}
+			url={typeof url === 'string' ? url : url.href}
+			type={type}
+			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
+			category={category}
+			tags={tags}
+			keywords={keywords}
+			author={author}
+		/>
+	)}
 
 <!-- Web Vitals Monitoring -->
 <script is:inline>

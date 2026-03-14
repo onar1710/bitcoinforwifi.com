@@ -33,7 +33,13 @@ export const GET: APIRoute = () => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:amp="http://www.google.com/schemas/sitemap-amp/0.9">
 ${allPages.map(page => {
   const url = page.slug === '' ? SITE : `${SITE}/${page.slug}`;
-  const ampUrl = `${url}?amp`;
+  // Generar URLs AMP correctas
+  let ampUrl;
+  if (page.slug === '') {
+    ampUrl = `${SITE}/index.amp`;
+  } else {
+    ampUrl = `${SITE}/${page.slug}.amp`;
+  }
   const changefreq = page.slug === 'blog' ? 'daily' : 'weekly';
   
   return `  <url>

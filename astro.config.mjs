@@ -28,5 +28,23 @@ export default defineConfig({
       theme: 'dracula',
       wrap: true
     }
+  },
+  vite: {
+    plugins: [
+      {
+        name: 'amp-redirect',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url && req.url.includes('?amp')) {
+              const url = req.url.replace('?amp', '.amp');
+              res.writeHead(301, { Location: url });
+              res.end();
+              return;
+            }
+            next();
+          });
+        }
+      }
+    ]
   }
 });
