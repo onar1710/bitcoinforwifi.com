@@ -1,5 +1,4 @@
 ---
-import AmpLayout from '../../../layouts/AmpLayout.astro';
 import { getPublishedPosts, getPostBySlug } from '../../../data/blog-posts.js';
 
 export async function getStaticPaths() {
@@ -15,16 +14,6 @@ const post = getPostBySlug(slug);
 if (!post) {
 	return Astro.redirect('/blog', 302);
 }
----
 
-<AmpLayout
-	title={post.title}
-	description={post.description}
-	canonicalUrl={new URL(`/blog/${post.slug}`, Astro.site).href}
->
-	<h1>{post.title}</h1>
-	<p>{post.description}</p>
-	<p>
-		<a href={`/blog/${post.slug}`}>Go to canonical</a>
-	</p>
-</AmpLayout>
+return Astro.redirect(`/blog/${post.slug}`, 301);
+---

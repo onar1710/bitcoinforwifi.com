@@ -1,16 +1,3 @@
 ---
-import AmpLayout from '../layouts/AmpLayout.astro';
-import { SITE } from '../config.js';
+return Astro.redirect('/', 301);
 ---
-
-<AmpLayout
-	title={SITE.title}
-	description={SITE.description}
-	canonicalUrl={new URL('/', Astro.site).href}
->
-	<h1>BitcoinForWifi</h1>
-	<p>{SITE.description}</p>
-	<p>
-		<a href="/blog">Read the blog</a>
-	</p>
-</AmpLayout>

@@ -32,14 +32,6 @@ const {
 	keywords,
 	author = SITE.author
 } = Astro.props;
-
-const pathname = Astro.url.pathname;
-const ampUrl = (() => {
-	if (pathname === '/') return new URL('/amp', Astro.site).href;
-	if (pathname === '/blog') return new URL('/blog/amp', Astro.site).href;
-	if (pathname.startsWith('/blog/') && !pathname.endsWith('/amp')) return new URL(`${pathname.replace(/\/$/, '')}/amp`, Astro.site).href;
-	return undefined;
-})();
 ---
 
 <!DOCTYPE html>
@@ -53,7 +45,6 @@ const ampUrl = (() => {
 <link rel="dns-prefetch" href="//www.googletagmanager.com">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.ampproject.org" crossorigin>
 
 <style>
 :root {
@@ -212,7 +203,6 @@ body {
 		description={description}
 		image={image}
 		url={typeof url === 'string' ? url : url.href}
-		ampUrl={ampUrl}
 		type={type}
 		publishedTime={publishedTime}
 		modifiedTime={modifiedTime}

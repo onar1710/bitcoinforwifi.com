@@ -4,67 +4,23 @@
       "source": "/(.*)",
       "has": [
         {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
           "type": "host",
           "value": "bitcoinforwifi.com"
         }
       ],
       "destination": "https://www.bitcoinforwifi.com/$1?$query",
       "permanent": true
-    },
-    {
-      "source": "/amp",
-      "has": [
-        {
-          "type": "query",
-          "key": "amp"
-        }
-      ],
-      "destination": "/amp?",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "query",
-          "key": "amp"
-        }
-      ],
-      "destination": "/amp?",
-      "permanent": false
-    },
-    {
-      "source": "/blog/amp",
-      "has": [
-        {
-          "type": "query",
-          "key": "amp"
-        }
-      ],
-      "destination": "/blog/amp?",
-      "permanent": false
-    },
-    {
-      "source": "/blog",
-      "has": [
-        {
-          "type": "query",
-          "key": "amp"
-        }
-      ],
-      "destination": "/blog/amp?",
-      "permanent": false
-    },
-    {
-      "source": "/blog/:slug",
-      "has": [
-        {
-          "type": "query",
-          "key": "amp"
-        }
-      ],
-      "destination": "/blog/:slug/amp?",
-      "permanent": false
     }
   ]
 }
