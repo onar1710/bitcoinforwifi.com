@@ -1,0 +1,48 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.bitcoinforwifi.com"
+        }
+      ],
+      "destination": "https://bitcoinforwifi.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "https://bitcoinforwifi.com/amp",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "https://bitcoinforwifi.com/blog/amp",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug",
+      "has": [
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "https://bitcoinforwifi.com/blog/:slug/amp",
+      "permanent": true
+    }
+  ]
+}

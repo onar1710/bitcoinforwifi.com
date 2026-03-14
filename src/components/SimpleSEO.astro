@@ -4,6 +4,7 @@ export interface Props {
 	description: string;
 	image?: string;
 	url?: string;
+	ampUrl?: string;
 	type?: string;
 	siteName?: string;
 	author?: string;
@@ -19,6 +20,7 @@ const {
 	description,
 	image = '/og-image.jpg',
 	url = new URL(Astro.url.pathname, Astro.site).href,
+	ampUrl,
 	type = 'website',
 	siteName = 'BitcoinForWifi',
 	author = 'BitcoinForWifi Expert',
@@ -48,9 +50,6 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 
 ---
 
-<!-- AMP Control - No AMP for this site -->
-<meta name="googlebot" content="index, follow, NOAMPHTML" />
-
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="description" content={description} />
@@ -58,7 +57,7 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 <meta name="keywords" content={finalKeywords} />
 <meta name="language" content="en_US" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta name="googlebot" content="index, follow, NOAMPHTML" />
+<meta name="googlebot" content="index, follow" />
 <meta name="bingbot" content="index, follow" />
 
 <!-- Additional SEO Meta Tags -->
@@ -205,6 +204,9 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 
 <!-- Canonical URL -->
 <link rel="canonical" href={url} />
+
+<!-- AMP -->
+{ampUrl && <link rel="amphtml" href={ampUrl} />}
 
 <!-- Alternative Language Links -->
 <link rel="alternate" hreflang="en" href={url} />

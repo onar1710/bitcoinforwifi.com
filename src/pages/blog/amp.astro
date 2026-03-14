@@ -1,0 +1,21 @@
+---
+import AmpLayout from '../../layouts/AmpLayout.astro';
+import { blogPosts } from '../../data/blog-posts';
+
+const posts = blogPosts.filter(p => p.published).slice(0, 20);
+---
+
+<AmpLayout
+	title="Blog - BitcoinForWifi"
+	description="Latest Bitcoin and cryptocurrency articles"
+	canonicalUrl={new URL('/blog', Astro.site).href}
+>
+	<h1>Blog</h1>
+	<ul>
+		{posts.map((p) => (
+			<li>
+				<a href={`/blog/${p.slug}`}>{p.title}</a>
+			</li>
+		))}
+	</ul>
+</AmpLayout>
