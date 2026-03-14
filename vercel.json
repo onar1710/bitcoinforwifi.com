@@ -1,6 +1,62 @@
 {
   "redirects": [
     {
+      "source": "/blog/amp",
+      "has": [
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "/blog/amp?",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "bitcoinforwifi.com"
+        },
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "https://www.bitcoinforwifi.com/amp?",
+      "permanent": false
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "host",
+          "value": "bitcoinforwifi.com"
+        },
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "https://www.bitcoinforwifi.com/blog/amp?",
+      "permanent": false
+    },
+    {
+      "source": "/blog/:slug",
+      "has": [
+        {
+          "type": "host",
+          "value": "bitcoinforwifi.com"
+        },
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "https://www.bitcoinforwifi.com/blog/:slug/amp?",
+      "permanent": false
+    },
+    {
       "source": "/",
       "has": [
         {
@@ -8,7 +64,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/amp",
+      "destination": "/amp?",
       "permanent": false
     },
     {
@@ -19,7 +75,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/blog/amp",
+      "destination": "/blog/amp?",
       "permanent": false
     },
     {
@@ -30,7 +86,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/blog/:slug/amp",
+      "destination": "/blog/:slug/amp?",
       "permanent": false
     },
     {
