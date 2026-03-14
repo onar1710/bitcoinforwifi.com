@@ -48,8 +48,8 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 
 ---
 
-<!-- AMP Control - Indicate that this is a non-AMP page -->
-<meta name="googlebot" content="index, follow, NOAMPHTML" />
+<!-- AMP Control - Allow Google to find AMP versions -->
+<meta name="googlebot" content="index, follow" />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -58,7 +58,7 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 <meta name="keywords" content={finalKeywords} />
 <meta name="language" content="en_US" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta name="googlebot" content="index, follow, NOAMPHTML" />
+<meta name="googlebot" content="index, follow" />
 <meta name="bingbot" content="index, follow" />
 
 <!-- Additional SEO Meta Tags -->
@@ -206,6 +206,9 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 <!-- Canonical URL -->
 <link rel="canonical" href={url} />
 
+<!-- AMP Link - Point to AMP version -->
+<link rel="amphtml" href={`${url.replace(/\/$/, '')}.amp`} />
+
 <!-- Alternative Language Links -->
 <link rel="alternate" hreflang="en" href={url} />
 <link rel="alternate" hreflang="en-US" href={url} />
@@ -227,6 +230,9 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 
 <!-- Canonical URL -->
 <link rel="canonical" href={url} />
+
+<!-- AMP Link - Point to AMP version -->
+<link rel="amphtml" href={`${url.replace(/\/$/, '')}.amp`} />
 
 <!-- Alternative Language Links -->
 <link rel="alternate" hreflang="en" href={url} />
