@@ -1,5 +1,5 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/",
       "has": [
@@ -8,8 +8,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/amp",
-      "permanent": true
+      "destination": "/amp"
     },
     {
       "source": "/blog",
@@ -19,8 +18,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/blog/amp",
-      "permanent": true
+      "destination": "/blog/amp"
     },
     {
       "source": "/blog/:slug",
@@ -30,8 +28,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/blog/:slug/amp",
-      "permanent": true
+      "destination": "/blog/:slug/amp"
     }
   ]
 }

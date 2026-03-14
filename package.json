@@ -8,6 +8,7 @@
     "build": "node sync-blog-posts.js && astro check && astro build",
     "preview": "astro preview",
     "sync-blog": "node sync-blog-posts.js",
+    "diagnose-amp": "node diagnose-amp.mjs",
     "astro": "astro"
   },
   "dependencies": {

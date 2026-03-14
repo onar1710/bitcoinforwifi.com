@@ -1,7 +1,7 @@
 export const SITE = {
   title: 'Expert blog on Bitcoin and cryptocurrency investing - BitcoinForWifi',
   description: 'Expert blog about Bitcoin, blockchain technology and the future of decentralized finance',
-  url: 'https://bitcoinforwifi.com',
+  url: 'https://www.bitcoinforwifi.com',
   author: 'BitcoinForWifi Expert',
   logo: '/logo.svg',
   image: '/og-image.jpg',

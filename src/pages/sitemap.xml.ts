@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { blogPosts } from '../data/blog-posts';
 
-const SITE = 'https://bitcoinforwifi.com';
+const SITE = 'https://www.bitcoinforwifi.com';
 
 // Generar lista de páginas estáticas
 const staticPages = [
