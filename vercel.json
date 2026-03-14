@@ -8,7 +8,7 @@
           "key": "amp"
         }
       ],
-      "destination": "/$1",
+      "destination": "/$1?",
       "permanent": true
     },
     {
