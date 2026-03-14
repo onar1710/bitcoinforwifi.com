@@ -30,16 +30,9 @@ export const GET: APIRoute = () => {
   const today = new Date().toISOString().split('T')[0];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:amp="http://www.google.com/schemas/sitemap-amp/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(page => {
   const url = page.slug === '' ? SITE : `${SITE}/${page.slug}`;
-  // Generar URLs AMP correctas
-  let ampUrl;
-  if (page.slug === '') {
-    ampUrl = `${SITE}/index.amp`;
-  } else {
-    ampUrl = `${SITE}/${page.slug}.amp`;
-  }
   const changefreq = page.slug === 'blog' ? 'daily' : 'weekly';
   
   return `  <url>
@@ -47,7 +40,6 @@ ${allPages.map(page => {
     <lastmod>${today}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${page.priority}</priority>
-    <amp:html>${ampUrl}</amp:html>
   </url>`;
 }).join('\n')}
 </urlset>`;
