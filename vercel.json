@@ -16,11 +16,10 @@
       "has": [
         {
           "type": "query",
-          "key": "amp",
-          "value": ""
+          "key": "amp"
         }
       ],
-      "destination": "/amp",
+      "destination": "/amp?",
       "permanent": false
     },
     {
@@ -28,11 +27,10 @@
       "has": [
         {
           "type": "query",
-          "key": "amp",
-          "value": ""
+          "key": "amp"
         }
       ],
-      "destination": "/amp",
+      "destination": "/amp?",
       "permanent": false
     },
     {
@@ -40,11 +38,10 @@
       "has": [
         {
           "type": "query",
-          "key": "amp",
-          "value": ""
+          "key": "amp"
         }
       ],
-      "destination": "/blog/amp",
+      "destination": "/blog/amp?",
       "permanent": false
     },
     {
@@ -52,11 +49,10 @@
       "has": [
         {
           "type": "query",
-          "key": "amp",
-          "value": ""
+          "key": "amp"
         }
       ],
-      "destination": "/blog/amp",
+      "destination": "/blog/amp?",
       "permanent": false
     },
     {
@@ -64,11 +60,10 @@
       "has": [
         {
           "type": "query",
-          "key": "amp",
-          "value": ""
+          "key": "amp"
         }
       ],
-      "destination": "/blog/:slug/amp",
+      "destination": "/blog/:slug/amp?",
       "permanent": false
     }
   ]
