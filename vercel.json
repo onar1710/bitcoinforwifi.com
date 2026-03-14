@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/blog/how-much-is-0-46-bitcoin-wort",
+      "destination": "/blog/how-much-is-0-46-bitcoin-worth",
+      "permanent": true
+    },
+    {
       "source": "/(.*)",
       "has": [
         {
