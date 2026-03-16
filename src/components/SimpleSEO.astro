@@ -265,71 +265,14 @@ const finalKeywords = keywords || (tags && Array.isArray(tags) && tags.length > 
 	...(type === 'article' && {
 		"datePublished": formattedPublishedTime,
 		"dateModified": formattedModifiedTime,
-	}),
-	"author": {
-		"@type": "Person",
-		"name": author,
-		"url": `${Astro.site}/about`,
-		"jobTitle": author.includes('Michael') ? 'Founder & Editor in Chief' : author.includes('Sarah') ? 'Technical Analyst' : 'Blockchain Developer',
-		"knowsAbout": ["Bitcoin", "Cryptocurrency", "Blockchain", "DeFi", "Trading"]
-	},
-	"publisher": {
-		"@type": "Organization",
-		"name": siteName,
-		"url": Astro.site,
-		"description": "Expert blog on Bitcoin and cryptocurrency investing",
-		"logo": {
-			"@type": "ImageObject",
-			"url": `${Astro.site}/logo.svg`,
-			"width": 512,
-			"height": 512
+		"author": {
+			"@type": "Person",
+			"name": author
 		},
-		"sameAs": [
-			"https://twitter.com/bitcoinforwifi",
-			"https://github.com/bitcoinforwifi"
-		],
-		"contactPoint": {
-			"@type": "ContactPoint",
-			"contactType": "customer service",
-			"url": `${Astro.site}/contact`
-		}
-	},
-	"isPartOf": {
-		"@type": "WebSite",
-		"name": siteName,
-		"url": Astro.site,
-		"description": "Expert blog on Bitcoin and cryptocurrency investing",
-		"inLanguage": "en_US",
 		"publisher": {
 			"@type": "Organization",
 			"name": siteName,
 			"url": Astro.site
-		}
-	},
-	"mainEntity": {
-		"@type": "WebPage",
-		"@id": url,
-		"name": title,
-		"description": description,
-		"url": url
-	},
-	...(type === 'article' && {
-		"articleSection": category || 'Bitcoin',
-		"keywords": finalKeywords,
-		"wordCount": Math.floor(Math.random() * 500) + 1500, // Estimated word count
-		"about": ["Bitcoin", "Cryptocurrency", "Blockchain", "Investment", "Trading"],
-		"offers": {
-			"@type": "Offer",
-			"price": "0",
-			"priceCurrency": "USD",
-			"availability": "https://schema.org/InStock"
-		},
-		"aggregateRating": {
-			"@type": "AggregateRating",
-			"ratingValue": "4.9",
-			"reviewCount": "150",
-			"bestRating": "5",
-			"worstRating": "1"
 		}
 	})
 })}></script>
