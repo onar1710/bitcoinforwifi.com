@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { getPostUrl } from '../utils/editorialRouting';
-import fs from 'node:fs/promises';
+import dictionaryRaw from '../../dicionario-interlink?raw';
 
 export interface Props {
 	entrySlug: string;
@@ -39,8 +39,6 @@ const seededShuffle = <T,>(arr: T[], seedStr: string): T[] => {
 
 const clamp = (n: number, min: number, max: number): number => Math.max(min, Math.min(max, n));
 
-const dictionaryPath = new URL('../../dicionario-interlink', import.meta.url);
-const dictionaryRaw = await fs.readFile(dictionaryPath, 'utf-8');
 const dictionaryPhrases = dictionaryRaw
 	.split(/\r?\n/g)
 	.map((l) => l.trim())
