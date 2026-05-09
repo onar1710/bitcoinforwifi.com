@@ -1,0 +1,258 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { EDITORIAL_CATEGORIES } from '../data/blog-posts';
+import { formatDate } from '../utils/dateUtils.js';
+import { getPostUrl, LEGACY_BLOG_CANONICAL_SLUGS } from '../utils/editorialRouting';
+
+const SITE = {
+	seoTitle: 'BitcoinForWifi',
+	seoH1: 'BitcoinForWifi | Bitcoin, Technology, Programming & the Digital Economy Explained',
+	seoDescription: 'BitcoinForWifi explores Bitcoin, technology, programming, economics and digital marketing with guides, insights and analysis for the digital economy.',
+	seoKeywords: 'bitcoin, cryptocurrency, blockchain, technology news, programming tutorials, coding, digital marketing, economics insights, finance, crypto economy, tech trends, web development, fintech, online business',
+  url: 'https://bitcoinforwifi.com'
+};
+
+const entries = await getCollection('blog', ({ data }) => data.published);
+const publishedPosts = entries
+	.map((entry) => ({
+		slug: entry.slug,
+		...entry.data
+	}))
+	.slice()
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const pinnedTopStory = publishedPosts.find((p) => p.homeSection === 'topStory');
+const pinnedLatest = publishedPosts.filter((p) => p.homeSection === 'latest');
+const pinnedMoreStories = publishedPosts.filter((p) => p.homeSection === 'moreStories');
+
+const PostImage = (await import('../components/PostImage.astro') as any).default;
+
+const withoutPinned = (posts: typeof publishedPosts): typeof publishedPosts =>
+	posts.filter((p) => p.homeSection === 'none' || !p.homeSection);
+
+const mergePinned = (pinned: typeof publishedPosts, fallback: typeof publishedPosts, limit: number): typeof publishedPosts => {
+	const pinnedUnique = pinned.filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i);
+	const fallbackFiltered = fallback.filter((p) => !pinnedUnique.some((x) => x.slug === p.slug));
+	return [...pinnedUnique, ...fallbackFiltered].slice(0, limit);
+};
+
+const getEditorialPosts = (categorySlug: string): typeof publishedPosts => {
+	const isLegacyCategory = categorySlug === 'bitcoin';
+	return publishedPosts
+		.filter((post) => post.slug.startsWith(`${categorySlug}/`) || (isLegacyCategory && !post.slug.includes('/') && LEGACY_BLOG_CANONICAL_SLUGS.has(post.slug)))
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
+
+const basePosts = withoutPinned(publishedPosts);
+const leadStory = pinnedTopStory ?? basePosts[0];
+
+const secondaryBase = basePosts.filter((p) => p.slug !== leadStory?.slug);
+const secondaryStories = mergePinned(pinnedLatest, secondaryBase, 5);
+
+const latestBase = basePosts.filter((p) => p.slug !== leadStory?.slug);
+const latestStories = mergePinned(pinnedMoreStories, latestBase, 9);
+
+const homepageWeekday = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+const homepageDateRest = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+const SECTION_STYLES = {
+	topStory: { text: 'text-bitcoin-orange', line: 'bg-bitcoin-orange' },
+	latest: { text: 'text-blue-600', line: 'bg-blue-600' },
+	moreStories: { text: 'text-emerald-600', line: 'bg-emerald-600' }
+} as const;
+
+const CATEGORY_STYLES: Record<string, { text: string; line: string }> = {
+	bitcoin: { text: 'text-bitcoin-orange', line: 'bg-bitcoin-orange' },
+	technology: { text: 'text-blue-600', line: 'bg-blue-600' },
+	'digital-marketing': { text: 'text-purple-600', line: 'bg-purple-600' },
+	programming: { text: 'text-emerald-600', line: 'bg-emerald-600' },
+	economics: { text: 'text-amber-600', line: 'bg-amber-600' },
+	finance: { text: 'text-rose-600', line: 'bg-rose-600' }
+};
+
+const getPostImage = (post: (typeof publishedPosts)[number]): string => {
+	return post.image || '/og-image.jpg';
+};
+---
+
+
+<Layout
+	title={SITE.seoTitle}
+	description={SITE.seoDescription}
+	keywords={SITE.seoKeywords}
+	type="website"
+>
+	<div class="container mx-auto px-4 py-2">
+		<h1 class="sr-only">{SITE.seoH1}</h1>
+		<div class="border-b border-gray-200 pb-0">
+			<div class="text-sm text-center leading-none py-0.5">
+				<span class="text-blue-600">{homepageWeekday}</span>
+				<span class="text-black">, {homepageDateRest}</span>
+			</div>
+		</div>
+
+		<section class="mt-3 grid grid-cols-1 lg:grid-cols-12 gap-10">
+			{leadStory && (
+				<article class="lg:col-span-7">
+					<div class="border-b border-gray-200 pb-6">
+						<a href={getPostUrl(leadStory)} class="block mb-4">
+							<PostImage
+								src={getPostImage(leadStory)}
+								alt={leadStory.title}
+								loading="eager"
+								class="w-full h-auto rounded-lg border border-gray-200 bg-gray-50"
+							/>
+						</a>
+						<a href={getPostUrl(leadStory)} class="block">
+							<div class={`mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wide ${SECTION_STYLES.topStory.text}`}>
+								<span class={`h-0.5 w-6 ${SECTION_STYLES.topStory.line}`}></span>
+								<span>Top Story</span>
+							</div>
+							<h2 class="text-3xl md:text-5xl font-serif font-bold leading-tight hover:text-bitcoin-orange transition-colors">
+								{leadStory.title}
+							</h2>
+						</a>
+						<p class="mt-4 text-lg leading-relaxed">
+							{leadStory.description}
+						</p>
+						<div class="mt-4 text-sm">
+							<span>{formatDate(leadStory.date)}</span>
+							<span class="mx-2">•</span>
+							<span>{leadStory.readTime}</span>
+						</div>
+					</div>
+				</article>
+			)}
+
+			<aside class="lg:col-span-5">
+				<div class="flex items-center justify-between border-b border-gray-200 pb-3">
+					<h3 class={`inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide ${SECTION_STYLES.latest.text}`}>
+						<span class={`h-0.5 w-6 ${SECTION_STYLES.latest.line}`}></span>
+						<span>Latest</span>
+					</h3>
+					<a href="/blog" class="text-sm font-semibold hover:text-bitcoin-orange transition-colors">All</a>
+				</div>
+				<div class="divide-y divide-gray-200">
+					{secondaryStories.map((post) => (
+						<article class="py-4">
+							<div class="flex gap-4">
+								<a href={getPostUrl(post)} class="shrink-0">
+									<PostImage
+										src={getPostImage(post)}
+										alt={post.title}
+										loading="lazy"
+										class="w-24 h-16 object-cover rounded-md border border-gray-200 bg-gray-50"
+									/>
+								</a>
+								<div class="min-w-0">
+									<h4 class="text-lg font-serif font-bold leading-snug hover:text-bitcoin-orange transition-colors">
+										<a href={getPostUrl(post)}>{post.title}</a>
+									</h4>
+									<div class="mt-2 text-sm">
+										<span>{formatDate(post.date)}</span>
+										<span class="mx-2">•</span>
+										<span>{post.readTime}</span>
+									</div>
+								</div>
+							</div>
+						</article>
+					))}
+				</div>
+			</aside>
+		</section>
+
+		<section class="mt-10 border-t border-gray-200 pt-8">
+			<div class="flex items-center justify-between mb-6">
+				<h3 class={`inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide ${SECTION_STYLES.moreStories.text}`}>
+					<span class={`h-0.5 w-6 ${SECTION_STYLES.moreStories.line}`}></span>
+					<span>More Stories</span>
+				</h3>
+				<a href="/blog" class="text-sm font-semibold hover:text-bitcoin-orange transition-colors">View all</a>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+				{latestStories.map((post) => (
+					<article class="border-t border-gray-200 pt-4">
+						<a href={getPostUrl(post)} class="block mb-3">
+							<PostImage
+								src={getPostImage(post)}
+								alt={post.title}
+								loading="lazy"
+								class="w-full h-40 object-cover rounded-lg border border-gray-200 bg-gray-50"
+							/>
+						</a>
+						<div class="text-xs font-semibold uppercase tracking-wide text-bitcoin-orange">
+							{post.category}
+						</div>
+						<h4 class="mt-2 text-xl font-serif font-bold leading-snug hover:text-bitcoin-orange transition-colors">
+							<a href={getPostUrl(post)}>{post.title}</a>
+						</h4>
+						<div class="mt-2 text-sm">
+							<span>{formatDate(post.date)}</span>
+							<span class="mx-2">•</span>
+							<span>{post.readTime}</span>
+						</div>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="mt-12 border-t border-gray-200 pt-10">
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+				{EDITORIAL_CATEGORIES.map((c) => {
+					const posts = getEditorialPosts(c.slug).slice(0, 4);
+					const style = CATEGORY_STYLES[c.slug] ?? { text: 'text-gray-900', line: 'bg-gray-900' };
+					return (
+						<section class="lg:col-span-4 border-t border-gray-200 pt-6">
+							<div class="flex items-baseline justify-between">
+								<h3 class={`inline-flex items-center gap-2 text-lg font-serif font-bold ${style.text}`}>
+									<span class={`h-0.5 w-6 ${style.line}`}></span>
+									<a href={`/${c.slug}`} class={`${style.text} hover:text-bitcoin-light transition-colors`}>{c.label}</a>
+								</h3>
+								<a href={`/${c.slug}`} class="text-sm font-semibold hover:text-bitcoin-orange transition-colors">More</a>
+							</div>
+							<div class="mt-4 flex flex-wrap gap-2">
+								{c.topics.slice(0, 5).map((t) => (
+									<a
+										href={`/${c.slug}/${t.slug}`}
+										class="px-3 py-1 border border-gray-200 rounded-full text-xs font-semibold uppercase tracking-wide hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors"
+									>
+										{t.label}
+									</a>
+								))}
+							</div>
+							<div class="mt-5 divide-y divide-gray-200">
+								{posts.map((post) => (
+									<article class="py-4">
+										<div class="flex gap-3">
+											<a href={getPostUrl(post)} class="shrink-0">
+												<PostImage
+													src={getPostImage(post)}
+													alt={post.title}
+													loading="lazy"
+													class="w-20 h-14 object-cover rounded-md border border-gray-200 bg-gray-50"
+												/>
+											</a>
+											<div class="min-w-0">
+												<h4 class="text-base font-serif font-bold leading-snug hover:text-bitcoin-orange transition-colors">
+													<a href={getPostUrl(post)}>{post.title}</a>
+												</h4>
+												<div class="mt-2 text-sm">
+													<span>{formatDate(post.date)}</span>
+													<span class="mx-2">•</span>
+													<span>{post.readTime}</span>
+												</div>
+											</div>
+										</div>
+									</article>
+								))}
+							</div>
+						</section>
+					);
+				})}
+			</div>
+		</section>
+
+
+	</div>
+</Layout>

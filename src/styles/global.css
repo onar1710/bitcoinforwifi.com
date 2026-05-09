@@ -1,0 +1,117 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Eliminar Google Fonts que bloquean renderizado */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap'); */
+
+:root {
+  --bitcoin-orange: #F7931A;
+  --bitcoin-dark: #4A4A4A;
+  --bitcoin-light: #FFD700;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: #fff;
+  color: #111827;
+}
+
+.text-gray-300,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600,
+.text-gray-700 {
+  color: #111827 !important;
+}
+
+.prose {
+  @apply text-gray-900;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-gray-900 font-bold;
+}
+
+.article-content h1:first-of-type {
+  display: none;
+}
+
+.prose a {
+  @apply text-bitcoin-orange hover:text-bitcoin-light transition-colors;
+}
+
+.prose code {
+  @apply bg-gray-100 text-bitcoin-orange px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-900 border border-gray-200 rounded-lg p-4 overflow-x-auto;
+}
+
+.prose pre code {
+  @apply bg-transparent px-0 py-0 text-gray-100;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-bitcoin-orange pl-4 italic text-gray-900;
+}
+
+.prose img {
+  @apply rounded-lg;
+}
+
+.prose ul,
+.prose ol {
+  list-style-position: outside;
+  padding-left: 1.5rem;
+  margin-left: 0;
+  text-align: left;
+}
+
+.prose li {
+  text-align: left;
+  display: list-item !important;
+  width: auto;
+}
+
+.prose li > p {
+  margin: 0;
+}
+
+.page-article .prose-invert {
+  color: #111827;
+}
+
+.page-article .prose-invert :where(p, li, ol, ul, strong, em, span, blockquote) {
+  color: inherit;
+}
+
+.page-article .prose-invert :where(h1, h2, h3, h4, h5, h6) {
+  color: #111827;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--bitcoin-orange), var(--bitcoin-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:transform hover:scale-105;
+}
+
+.bitcoin-glow {
+  box-shadow: 0 0 20px rgba(247, 147, 26, 0.3);
+}

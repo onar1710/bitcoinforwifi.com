@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { formatDate } from '../utils/dateUtils.js';
+import { getEntryBySlug } from 'astro:content';
+
+export interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+const entry = await getEntryBySlug('blog', slug);
+
+if (!entry) {
+	return Astro.redirect('/blog');
+}
+
+const { title, description, date, readTime, category, image, tags } = entry.data;
+const renderResult = await entry.render();
+---
+
+<Layout
+	title={title}
+	description={description}
+	image={image}
+	type="article"
+	publishedTime={date}
+	modifiedTime={entry.data.modifiedTime}
+	category={category}
+	tags={tags}
+	author={entry.data.author}
+>
+	<article class="py-20">
+		<div class="container mx-auto px-4 max-w-4xl">
+			<header class="mb-12">
+				<h1 class="text-4xl md:text-5xl font-bold mb-6">{title}</h1>
+				{description && (
+					<p class="text-xl text-gray-300 leading-relaxed mb-8">{description}</p>
+				)}
+			</header>
+
+			{image && (
+				<div class="mb-8">
+					<img src={image} alt={title} loading="eager" class="w-full h-auto rounded-lg border border-dark-border bg-dark" />
+				</div>
+			)}
+
+			<div class="flex items-center space-x-2 text-sm text-gray-400 mb-8">
+				{category && (
+					<span class="px-3 py-1 bg-bitcoin-orange text-white text-xs font-semibold rounded-full">
+						{category}
+					</span>
+				)}
+				<time datetime={date}>{formatDate(date)}</time>
+				{readTime && (
+					<>
+						<span>•</span>
+						<span>{readTime}</span>
+					</>
+				)}
+			</div>
+
+			<div class="prose prose-lg prose-invert max-w-none">
+				<renderResult.Content />
+			</div>
+		</div>
+	</article>
+</Layout>

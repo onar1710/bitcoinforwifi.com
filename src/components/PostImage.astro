@@ -1,0 +1,15 @@
+---
+export interface Props {
+	src?: string;
+	alt: string;
+	class?: string;
+	loading?: 'eager' | 'lazy';
+}
+
+const { src, alt, class: className, loading = 'lazy' } = Astro.props;
+
+const normalized = typeof src === 'string' ? src.trim() : '';
+const shouldRender = normalized.length > 0 && !normalized.toLowerCase().endsWith('.svg');
+---
+
+{shouldRender && <img src={normalized} alt={alt} loading={loading} class={className} />}

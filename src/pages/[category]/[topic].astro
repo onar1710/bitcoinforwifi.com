@@ -1,0 +1,206 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { EDITORIAL_CATEGORIES, getEditorialCategoryConfig } from '../../data/blog-posts';
+import { formatDate } from '../../utils/dateUtils.js';
+import { getPostUrl, LEGACY_BLOG_CANONICAL_SLUGS } from '../../utils/editorialRouting';
+
+ const isRenderablePostImage = (value: unknown): value is string => {
+ 	return typeof value === 'string' && value.trim().length > 0 && !value.trim().toLowerCase().endsWith('.svg');
+ };
+
+export async function getStaticPaths() {
+	return EDITORIAL_CATEGORIES.flatMap((c) =>
+		c.topics.slice(0, 5).map((t) => ({
+			params: { category: c.slug, topic: t.slug }
+		}))
+	);
+}
+
+const { category, topic } = Astro.params;
+const categoryConfig = category ? getEditorialCategoryConfig(category) : undefined;
+const topicConfig = categoryConfig ? categoryConfig.topics.find((t) => t.slug === topic) : undefined;
+
+if (!categoryConfig || !topicConfig) {
+	return Astro.redirect('/');
+}
+
+const entries = await getCollection('blog', ({ data, slug }) => data.published && (slug.startsWith(`${category}/`) || (category === 'bitcoin' && !slug.includes('/') && LEGACY_BLOG_CANONICAL_SLUGS.has(slug))));
+const publishedPosts = entries
+	.map((entry) => ({ slug: entry.slug, ...entry.data }))
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const normalizeText = (post: (typeof publishedPosts)[number]): string => {
+	return [post.title, post.description, post.category, (post.tags ?? []).join(' ')]
+		.join(' ')
+		.toLowerCase();
+};
+
+const matchesKeywords = (text: string, keywords: string[]): boolean => {
+	return keywords.some((k) => text.includes(k.toLowerCase()));
+};
+
+const isBitcoinCorePost = (text: string): boolean => {
+	return matchesKeywords(text, ['bitcoin', 'btc', 'wbtc', 'lightning']);
+};
+
+const mustHaveCategoryCore = (categorySlug: string, text: string): boolean => {
+	// Prevent cross-category false positives from broad keywords.
+	switch (categorySlug) {
+		case 'bitcoin':
+			return matchesKeywords(text, ['bitcoin', 'btc', 'wbtc', 'lightning']);
+		case 'technology':
+			return matchesKeywords(text, ['technology', 'tech', 'software', 'ai', 'security', 'blockchain']);
+		case 'digital-marketing':
+			return matchesKeywords(text, ['seo', 'marketing', 'analytics', 'search console', 'google analytics', 'content marketing']);
+		case 'programming':
+			return matchesKeywords(text, ['programming', 'code', 'developer', 'javascript', 'typescript', 'astro']);
+		case 'economics':
+			return matchesKeywords(text, ['economics', 'macro', 'inflation', 'rates', 'policy', 'adoption']);
+		case 'finance':
+			return matchesKeywords(text, ['finance', 'investing', 'investment', 'trading', 'portfolio', 'risk']);
+		default:
+			return true;
+	}
+};
+
+const normalizeCategory = (v: string): string => {
+	return String(v)
+		.trim()
+		.toLowerCase()
+		.replace(/&/g, 'and')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '');
+};
+
+const posts = (() => {
+	const config = EDITORIAL_CATEGORIES.find((c) => c.slug === categoryConfig.slug);
+	if (!config) return [];
+	const t = config.topics.find((x) => x.slug === topicConfig.slug);
+	const keywords = t ? t.keywords : [];
+	return publishedPosts
+		.filter((post) => {
+			const text = normalizeText(post);
+			if (config.slug !== 'bitcoin' && isBitcoinCorePost(text)) return false;
+			if (!mustHaveCategoryCore(config.slug, text)) return false;
+			return matchesKeywords(text, keywords);
+		})
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+})();
+
+const seoTitle = (() => {
+	if (categoryConfig.slug === 'bitcoin') return `Bitcoin ${topicConfig.label}`;
+	return `${categoryConfig.label} ${topicConfig.label}`;
+})();
+
+const metaDescription = (() => {
+	switch (categoryConfig.slug) {
+		case 'bitcoin':
+			return `${topicConfig.label} tutorials and explainers: setup, safety checks, common mistakes, and practical steps to use Bitcoin with confidence.`;
+		case 'technology':
+			return `${topicConfig.label} for builders: tools, best practices, and clear explanations you can apply in real projects without the fluff.`;
+		case 'digital-marketing':
+			return `${topicConfig.label} playbooks for SEO and growth: checklists, experiments, and execution tips focused on outcomes and tracking.`;
+		case 'programming':
+			return `${topicConfig.label} tutorials with patterns, code examples, and workflows you can use immediately to build, debug, and ship faster.`;
+		case 'economics':
+			return `${topicConfig.label} economics explained: incentives, macro forces, and market dynamics with clear reasoning and practical context.`;
+		case 'finance':
+			return `${topicConfig.label} finance breakdowns: investing, risk, and decision tools with practical frameworks for smarter money decisions.`;
+		default:
+			return `${categoryConfig.label} ${topicConfig.label} on BitcoinForWifi: ${categoryConfig.description}`;
+	}
+})();
+
+const metaKeywords = [
+	categoryConfig.label,
+	categoryConfig.slug,
+	topicConfig.label,
+	topicConfig.slug,
+	...categoryConfig.keywords,
+	...topicConfig.keywords
+]
+	.filter(Boolean)
+	.map((k) => String(k).trim())
+	.filter((k, i, arr) => k.length > 0 && arr.indexOf(k) === i)
+	.join(', ');
+---
+
+<Layout
+	title={seoTitle}
+	description={metaDescription}
+	keywords={metaKeywords}
+	type="website"
+>
+	<section class="py-12">
+		<div class="container mx-auto px-4">
+			<div class="text-center mb-6">
+				<h1 class="text-3xl md:text-4xl font-bold mb-3">
+					<span class="gradient-text">{categoryConfig.label}</span>
+				</h1>
+				<p class="text-lg text-gray-700 max-w-3xl mx-auto">
+					{topicConfig.label}
+				</p>
+			</div>
+
+			<div class="flex flex-wrap justify-center gap-2 mb-8">
+				<a
+					href={`/${categoryConfig.slug}`}
+					class="px-3 py-1.5 bg-white border border-gray-200 text-gray-700 rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors"
+				>
+					All
+				</a>
+				{categoryConfig.topics.slice(0, 5).map((t) => (
+					<a
+						href={`/${categoryConfig.slug}/${t.slug}`}
+						class={`px-3 py-1.5 border rounded-full transition-colors ${
+							t.slug === topicConfig.slug
+								? 'bg-bitcoin-orange text-white border-bitcoin-orange'
+								: 'bg-white border-gray-200 text-gray-700 hover:border-bitcoin-orange hover:text-bitcoin-orange'
+						}`}
+					>
+						{t.label}
+					</a>
+				))}
+			</div>
+
+			{posts.length === 0 ? (
+				<div class="max-w-2xl mx-auto text-center text-gray-400">
+					No articles yet for this topic.
+				</div>
+			) : (
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+					{posts.map((post) => (
+						<article class="bg-dark-card border border-dark-border rounded-lg overflow-hidden card-hover group">
+							<div class="h-48 bg-dark relative overflow-hidden">
+								{isRenderablePostImage(post.image) && (
+									<img src={post.image} alt={post.title} loading="lazy" class="w-full h-full object-cover" />
+								)}
+							</div>
+
+							<div class="p-6">
+								<div class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+									<time datetime={post.date}>
+										{formatDate(post.date)}
+									</time>
+									<span>•</span>
+									<span>{post.readTime}</span>
+								</div>
+
+								<h2 class="text-xl font-semibold mb-3 group-hover:text-bitcoin-orange transition-colors">
+									<a href={getPostUrl(post)}>{post.title}</a>
+								</h2>
+
+								<p class="text-gray-400 mb-4 line-clamp-3">{post.description}</p>
+
+								<a href={getPostUrl(post)} class="text-bitcoin-orange hover:text-bitcoin-light transition-colors font-medium inline-flex items-center">
+									Read article
+								</a>
+							</div>
+						</article>
+					))}
+				</div>
+			)}
+		</div>
+	</section>
+</Layout>

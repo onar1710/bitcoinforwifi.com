@@ -1,0 +1,229 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntryBySlug } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { getPostUrl } from '../../utils/editorialRouting';
+
+ const isRenderablePostImage = (value: unknown): value is string => {
+ 	return typeof value === 'string' && value.trim().length > 0 && !value.trim().toLowerCase().endsWith('.svg');
+ };
+
+export const PAGINATION = {
+  postsPerPage: 6
+};
+
+export async function getStaticPaths() {
+	const entries = await getCollection('blog', ({ data }) => data.published);
+	const posts = entries.map((entry) => ({ slug: entry.slug, ...entry.data }));
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
+	const existingStaticSlugs = new Set(
+		fs
+			.readdirSync(__dirname)
+			.filter((f) => f.endsWith('.astro') && f !== '[slug].astro')
+			.map((f) => f.replace(/\.astro$/, ''))
+	);
+  
+  return posts
+		.filter((post) => !post.slug.includes('/'))
+		.filter((post) => !existingStaticSlugs.has(post.slug))
+		.map(post => ({
+			params: { slug: post.slug },
+			props: post
+		}));
+}
+
+const post = Astro.props as { slug: string; [key: string]: any };
+const mdEntry = await getEntryBySlug('blog', post.slug);
+const mdRenderResult = mdEntry ? await mdEntry.render() : null;
+
+const PostImage = (await import('../../components/PostImage.astro') as any).default;
+
+// Redirect legacy /blog/<slug> to /<category>/<slug> when available.
+const canonicalUrl = getPostUrl(post);
+if (canonicalUrl !== `/blog/${post.slug}`) {
+	return Astro.redirect(canonicalUrl);
+}
+
+// NOTE: This route renders posts sourced from Content Collections.
+// The legacy internal linking utility expects BlogPost.content from src/data/blog-posts.ts.
+// For collection-based posts, we render Markdown/HTML directly and compute related posts
+// from collection metadata.
+const processedContent = { content: '', internalLinks: [] as Array<{ url: string; anchorText: string; title: string }> };
+
+const hashString = (value: string): number => {
+	let h = 2166136261;
+	for (let i = 0; i < value.length; i++) {
+		h ^= value.charCodeAt(i);
+		h = Math.imul(h, 16777619);
+	}
+	return h >>> 0;
+};
+
+const seededShuffle = (arr: any[], seedStr: string): any[] => {
+	let seed = hashString(seedStr) || 1;
+	const rand = () => {
+		seed += 0x6D2B79F5;
+		let t = seed;
+		t = Math.imul(t ^ (t >>> 15), t | 1);
+		t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+	};
+
+	const copy = arr.slice();
+	for (let i = copy.length - 1; i > 0; i--) {
+		const j = Math.floor(rand() * (i + 1));
+		[copy[i], copy[j]] = [copy[j], copy[i]];
+	}
+	return copy;
+};
+
+const relatedEntries = await getCollection('blog', ({ data }) => data.published);
+const relatedArticlesBase = relatedEntries
+	.map((entry) => ({ slug: entry.slug, ...entry.data }))
+	.filter((p) => p.slug !== post.slug)
+	.filter((p) => {
+		const sameCategory = Boolean(post.category) && p.category === post.category;
+		const currentTags = (post.tags ?? []) as string[];
+		const pTags = (p.tags ?? []) as string[];
+		const sharedTags = currentTags.length > 0 && pTags.some((t) => currentTags.includes(t));
+		return sameCategory || sharedTags;
+	})
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const relatedArticles = seededShuffle(relatedArticlesBase, post.slug).slice(0, 6);
+
+ const pageImage = isRenderablePostImage(post.image) ? post.image : undefined;
+---
+
+<Layout title={post.title} type="article" description={post.description} image={pageImage} category={post.category} keywords={(mdEntry?.data as any)?.keywords} tags={post.tags} publishedTime={post.date} modifiedTime={post.modifiedTime}>
+	<article class="py-20">
+		<div class="container mx-auto px-4 max-w-4xl">
+			<!-- Header -->
+			<header class="mb-12">
+				{pageImage && (
+					<div class="mb-8">
+						<img src={pageImage} alt={post.title} loading="eager" class="w-full h-auto rounded-lg border border-dark-border bg-dark" />
+					</div>
+				)}
+				
+				<h1 class="text-4xl md:text-5xl font-bold mb-6">
+					<span class="gradient-text">{post.title}</span>
+				</h1>
+				
+				<!-- Author Info -->
+				<div class="flex items-center space-x-4 p-4 bg-dark-card border border-dark-border rounded-lg mb-4">
+					<div class="w-12 h-12 bg-bitcoin-orange/20 rounded-full flex items-center justify-center">
+						<svg class="w-6 h-6 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+						</svg>
+					</div>
+					<div>
+						<div class="font-semibold">{post.author}</div>
+						<div class="text-sm text-gray-400">Expert Bitcoin Analyst</div>
+					</div>
+				</div>
+				
+				<div class="flex items-center space-x-2 text-sm text-gray-400">
+					<span class="px-3 py-1 bg-bitcoin-orange text-white text-xs font-semibold rounded-full">
+						{post.category}
+					</span>
+					<time datetime={post.date}>
+						{new Date(post.date).toLocaleDateString('en-US', { 
+							year: 'numeric', 
+							month: 'long', 
+							day: 'numeric' 
+						})}
+					</time>
+					<span>•</span>
+					<span>{post.readTime}</span>
+				</div>
+			</header>
+			
+			<!-- Content with Internal Links -->
+			<div class="article-content prose prose-lg prose-invert max-w-none">
+				{mdRenderResult ? <mdRenderResult.Content /> : <Fragment set:html={processedContent.content} />}
+			</div>
+			
+			<!-- Internal Links Summary -->
+			{processedContent.internalLinks.length > 0 && (
+				<div class="mt-12 p-6 bg-dark-card border border-dark-border rounded-lg">
+					<h3 class="text-lg font-semibold mb-4">Internal Links in This Article</h3>
+					<div class="space-y-2">
+						{processedContent.internalLinks.map(link => (
+							<div class="flex items-center space-x-2">
+								<svg class="w-4 h-4 text-bitcoin-orange" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+								</svg>
+								<a href={link.url} class="text-bitcoin-orange hover:text-bitcoin-light transition-colors">
+									{link.anchorText}
+								</a>
+								<span class="text-gray-500 text-sm">→ {link.title}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+			
+			<!-- Tags -->
+			<div class="mt-12 pt-8 border-t border-dark-border">
+				<h3 class="text-lg font-semibold mb-4">Tags</h3>
+				<div class="flex flex-wrap gap-2">
+					{(post.tags ?? []).map((tag: string) => (
+						<span class="px-3 py-1 bg-dark border border-dark-border text-gray-300 text-sm rounded-full hover:border-bitcoin-orange hover:text-bitcoin-orange transition-colors cursor-pointer">
+							{tag}
+						</span>
+					))}
+				</div>
+			</div>
+			
+			<!-- Share Buttons -->
+			<div class="mt-12 pt-8 border-t border-dark-border">
+				<h3 class="text-lg font-semibold mb-4">Share</h3>
+				<div class="flex space-x-4">
+					<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+						Share on Twitter
+					</button>
+					<button class="px-4 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-colors">
+						Share on Facebook
+					</button>
+					<button class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors">
+						Copy Link
+					</button>
+				</div>
+			</div>
+			
+			<!-- Related Posts -->
+			<div class="mt-16 pt-8 border-t border-dark-border">
+				<h3 class="text-2xl font-bold mb-8">
+					<span class="gradient-text">Related Articles</span>
+				</h3>
+				
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					{relatedArticles.map(relatedPost => (
+						<article class="bg-dark-card border border-dark-border rounded-lg p-6 card-hover">
+							<a href={getPostUrl(relatedPost)} class="block mb-4">
+								<PostImage
+									src={relatedPost.image}
+									alt={relatedPost.title}
+									loading="lazy"
+									class="w-full h-32 object-cover rounded-lg border border-dark-border bg-dark"
+								/>
+							</a>
+							<h4 class="text-lg font-semibold mb-3 hover:text-bitcoin-orange transition-colors">
+								<a href={getPostUrl(relatedPost)}>{relatedPost.title}</a>
+							</h4>
+							<p class="text-gray-400 mb-3">{relatedPost.description}</p>
+							<a href={getPostUrl(relatedPost)} class="inline-flex items-center text-bitcoin-orange hover:text-bitcoin-light transition-colors font-semibold">
+								Read me
+							</a>
+							<div class="text-sm text-gray-500">{relatedPost.readTime}</div>
+						</article>
+					))}
+				</div>
+			</div>
+		</div>
+	</article>
+</Layout>

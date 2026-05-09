@@ -1,0 +1,31 @@
+{
+  "redirects": [
+    {
+      "source": "/blog/how-much-is-0-46-bitcoin-wort",
+      "destination": "/blog/how-much-is-0-46-bitcoin-worth",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "amp"
+        }
+      ],
+      "destination": "/$1?",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "bitcoinforwifi.com"
+        }
+      ],
+      "destination": "https://www.bitcoinforwifi.com/$1?$query",
+      "permanent": true
+    }
+  ]
+}
