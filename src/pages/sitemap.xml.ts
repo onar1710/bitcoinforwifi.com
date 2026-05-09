@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { blogPosts } from '../data/blog-posts';
+import { getCollection } from 'astro:content';
 import { getPostUrl } from '../utils/editorialRouting';
 
 import { SITE as SITE_CONFIG } from '../config.js';
@@ -29,20 +29,23 @@ const buildDate = normalizeIsoDate(new Date().toISOString());
 // Only include Home + Articles
 const staticPages: SitemapEntry[] = [{ slug: '', priority: '1.0', changefreq: 'weekly', lastmod: buildDate }];
 
-// Generate URLs for blog posts
-const blogPages: SitemapEntry[] = blogPosts
-	.filter((post) => post.published)
-	.map((post) => ({
-		// Strip leading slash so it joins correctly with SITE below.
-		slug: getPostUrl(post).replace(/^\//, ''),
-		priority: '0.9',
-		changefreq: 'monthly',
-		lastmod: normalizeIsoDate(post.modifiedTime || post.date)
-	}));
-
 // Combine all pages
-const allPages = (() => {
-	const combined = [...staticPages, ...blogPages];
+
+export const GET: APIRoute = async () => {
+	const entries = await getCollection('blog', ({ data }) => data.published);
+	const blogPages: SitemapEntry[] = entries.map((entry) => {
+		const postLike = { slug: entry.slug, ...entry.data } as any;
+		return {
+			// Strip leading slash so it joins correctly with SITE below.
+			slug: getPostUrl(postLike).replace(/^\//, ''),
+			priority: '0.9',
+			changefreq: 'monthly',
+			lastmod: normalizeIsoDate((entry.data as any).modifiedTime || (entry.data as any).date)
+		};
+	});
+
+	const allPages = (() => {
+		const combined = [...staticPages, ...blogPages];
 	const bySlug = new Map<string, SitemapEntry>();
 
 	for (const page of combined) {
@@ -66,9 +69,8 @@ const allPages = (() => {
 	}
 
 	return Array.from(bySlug.values());
-})();
+	})();
 
-export const GET: APIRoute = () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(page => {
